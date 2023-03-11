@@ -15,12 +15,14 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
+        
+        self.view.backgroundColor = .systemGray6
+        //setupView()
     }
-    
+    /*
     private func setupView() {
         self.view.backgroundColor = .systemGray6
-        setupMenuButtons()
+        //setupMenuButtons()
     }
     
     private func setupMenuButtons() {
@@ -102,6 +104,7 @@ class ViewController: UIViewController {
         let profileViewController = ProfileViewController()
         navigationController?.pushViewController(profileViewController, animated: true)
     }
+     */
 }
 
 // экраны

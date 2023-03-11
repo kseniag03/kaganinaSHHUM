@@ -8,10 +8,11 @@ import UIKit
 final class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-        setupNavBar()
+        self.view.backgroundColor = .yellow
+        //setupView()
+        //setupNavBar()
     }
-    
+    /*
     private func setupView() {
         self.view.backgroundColor = .yellow
     }
@@ -31,5 +32,5 @@ final class SearchViewController: UIViewController {
     @objc
     private func dismissViewController(_ sender: UIViewController) {
         self.dismiss(animated: true)
-    }
+    }*/
 }

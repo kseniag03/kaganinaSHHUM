@@ -5,27 +5,62 @@
 
 import Foundation
 import UIKit
-import AVFAudio
+//import AVFAudio
 import AVFoundation
 
-final class RecorderViewController: UIViewController {
+final class RecorderViewController: UIViewController {/*
+    var recordingSession: AVAudioSession?
+    var recorder: AVAudioRecorder?
+    var player: AVAudioPlayer?
     
-    var recorder : AVAudioRecorder?
-    var player : AVAudioPlayer?
+    var numberOfRecords: Int = 0
     
+    let numberStoreKey = "numberOfRecordsKey"
     let file = "record.m4a"
     
     var recordStartButton = UIButton()
     var recordStopButton = UIButton()
     var playRecordButton = UIButton()
     
+    var recordsTableView = UITableView()*/
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-        setupNavBar()
-        setupRecorder()
+        self.view.backgroundColor = .blue
+        
+        //setupView()
+        //setupNavBar()
+        
+        //print("6666")
+        /*
+        
+        recordingSession = AVAudioSession.sharedInstance()
+        
+        if let number: Int = UserDefaults.standard.object(forKey: numberStoreKey) as? Int {
+            numberOfRecords = number
+        }
+        
+        switch recordingSession?.recordPermission {
+        case .granted:
+            print("granted")
+        case .denied:
+            print("denied")
+        case .undetermined:
+            AVAudioSession.sharedInstance().requestRecordPermission({ granted in })
+        default:
+            print("unknown")
+        }
+        
+        /*
+        AVAudioSession.sharedInstance().requestRecordPermission { (hasPermission) in
+            if hasPermission {
+                print("ACCEPTED")
+            }
+        }*/
+        
+        setupRecorder()*/
     }
-    
+    /*
     private func makeMenuButton(title: String) -> UIButton {
         let button = UIButton()
         button.setTitle(title, for: .normal)
@@ -106,36 +141,99 @@ final class RecorderViewController: UIViewController {
     @objc
     private func dismissViewController(_ sender: UIViewController) {
         self.dismiss(animated: true)
-    }
+    }*/
 }
-
-extension RecorderViewController: AVAudioPlayerDelegate {
-    private func setupRecorder() {
-        
-        let recordSettings = [AVFormatIDKey: kAudioFormatAppleLossless,
-            AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
-            AVEncoderBitRateKey: 320000,
-            AVNumberOfChannelsKey: 2,
-            AVSampleRateKey: 44100.0 ] as [String : Any]
-        
-        do {
-            recorder = try AVAudioRecorder(url: getFileURL(fileName: file), settings: recordSettings as [String : Any])
-            recorder?.delegate = self
-            recorder?.prepareToRecord()
-        } catch {
-            print("!!!!!! smth is wrong\n")
-        }
+/*
+extension RecorderViewController {
+    
+    private func getDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentDirectory = paths[0]
+        return documentDirectory
     }
     
-    func getCacheDirectory() -> String {
+    private func getCacheDirectory() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
         return paths[0]
     }
     
-    func getFileURL(fileName: String) -> URL {
+    private func getFileURL(fileName: String) -> URL {
         let path = (getCacheDirectory() as NSString).appendingPathComponent(fileName)
         let filePath = URL(fileURLWithPath: path)
         return filePath
+    }
+    
+    
+    private func displayAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "dismiss", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
+}
+
+extension RecorderViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return numberOfRecords
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = String(indexPath.row + 1)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let path = getDirectory().appendingPathComponent("\(indexPath.row + 1).m4a", conformingTo: .url)
+        
+        do {
+            player = try AVAudioPlayer(contentsOf: path)
+            player?.play()
+        } catch {
+            
+        }
+    }
+    
+    
+}
+
+extension RecorderViewController: AVAudioRecorderDelegate {
+    
+    private func setupRecorder() {
+        
+        
+        if recorder == nil {
+            numberOfRecords += 1
+            let fileName = getDirectory().appendingPathComponent("\(numberOfRecords).m4a", conformingTo: .url)
+            
+            let recordSettings = [AVFormatIDKey: kAudioFormatAppleLossless,
+                AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
+                AVEncoderBitRateKey: 320000,
+                AVNumberOfChannelsKey: 2,
+                AVSampleRateKey: 44100.0 ] as [String : Any]
+            
+            do {
+                recorder = try AVAudioRecorder(url: fileName/*getFileURL(fileName: file)*/, settings: recordSettings as [String : Any])
+                recorder?.delegate = self
+                recorder?.prepareToRecord()
+            } catch {
+                displayAlert(title: "ERROR", message: "Recording has failed")
+                print("!!!!!! smth is wrong\n")
+            }
+        } else {
+            // stop recording
+            recorder?.stop()
+            recorder = nil
+            
+            UserDefaults.standard.set(numberOfRecords, forKey: numberStoreKey)
+            recordsTableView.reloadData()
+            
+            recordStartButton.setTitle("Start", for: .normal)
+        }
+        
+        
+        
     }
     
     @objc
@@ -183,7 +281,8 @@ extension RecorderViewController: AVAudioPlayerDelegate {
     }
 }
 
-extension RecorderViewController: AVAudioRecorderDelegate {
+extension RecorderViewController: AVAudioPlayerDelegate {
+    
     private func preparePlayer() {
         do {
             player = try AVAudioPlayer(contentsOf: getFileURL(fileName: file))
@@ -227,3 +326,8 @@ extension RecorderViewController: AVAudioRecorderDelegate {
         playRecordButton.setTitle("PLAY", for: .normal)
     }
 }
+*/
+// возможность сохранять аудио
+// возможность записать несколько аудио
+// хранить записанные аудио не в кэше
+// синхронизация с облаком

@@ -19,5 +19,7 @@
 			</array>
 		</dict>
 	</dict>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Can I use the microphone ?</string>
 </dict>
 </plist>

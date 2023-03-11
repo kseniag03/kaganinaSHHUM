@@ -14,6 +14,7 @@
 		1C3D91BA296B173B009403ED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C3D91B8296B173B009403ED /* LaunchScreen.storyboard */; };
 		1C3D91C2296B1AF6009403ED /* PinLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3D91C1296B1AF6009403ED /* PinLibrary.swift */; };
 		1C3D91C7296B2361009403ED /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3D91C6296B2361009403ED /* Tag.swift */; };
+		1C4CBCB929BD356900187E92 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4CBCB829BD356900187E92 /* TabBarController.swift */; };
 		1C66F2D429ABD3B4007543DD /* DirectoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C66F2D329ABD3B4007543DD /* DirectoryViewController.swift */; };
 		1C766EE029BA09A500BF9CF5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C766EDF29BA09A500BF9CF5 /* ViewController.swift */; };
 		1CF14543296C5F1C00DDE53B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF14542296C5F1C00DDE53B /* ProfileViewController.swift */; };
@@ -31,6 +32,7 @@
 		1C3D91BB296B173B009403ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1C3D91C1296B1AF6009403ED /* PinLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinLibrary.swift; sourceTree = "<group>"; };
 		1C3D91C6296B2361009403ED /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
+		1C4CBCB829BD356900187E92 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		1C66F2D329ABD3B4007543DD /* DirectoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryViewController.swift; sourceTree = "<group>"; };
 		1C766EDF29BA09A500BF9CF5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../../ViewController.swift; sourceTree = "<group>"; };
 		1CF14542296C5F1C00DDE53B /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				1C3D91C3296B1AFD009403ED /* Library */,
 				1C3D91AD296B173A009403ED /* AppDelegate.swift */,
 				1C3D91AF296B173A009403ED /* SceneDelegate.swift */,
+				1C4CBCB829BD356900187E92 /* TabBarController.swift */,
 				1C3D91B6296B173B009403ED /* Assets.xcassets */,
 				1C3D91B8296B173B009403ED /* LaunchScreen.storyboard */,
 				1C3D91BB296B173B009403ED /* Info.plist */,
@@ -181,6 +184,7 @@
 			files = (
 				1CF14543296C5F1C00DDE53B /* ProfileViewController.swift in Sources */,
 				1CF14545296C5FAE00DDE53B /* SearchViewController.swift in Sources */,
+				1C4CBCB929BD356900187E92 /* TabBarController.swift in Sources */,
 				1C66F2D429ABD3B4007543DD /* DirectoryViewController.swift in Sources */,
 				1C766EE029BA09A500BF9CF5 /* ViewController.swift in Sources */,
 				1C1FECD229BB2E1100D18911 /* InfoViewController.swift in Sources */,

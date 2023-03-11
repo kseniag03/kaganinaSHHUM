@@ -8,10 +8,12 @@ import UIKit
 final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-        setupNavBar()
+        self.view.backgroundColor = .red
+        
+        //setupView()
+        //setupNavBar()
     }
-    
+    /*
     private func setupView() {
         self.view.backgroundColor = .red
     }
@@ -31,5 +33,5 @@ final class ProfileViewController: UIViewController {
     @objc
     private func dismissViewController(_ sender: UIViewController) {
         self.dismiss(animated: true)
-    }
+    }*/
 }
