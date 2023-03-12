@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		16A0890AF4FB1F525EDE8633 /* Pods_kaganinaSHHUM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFDA7BC63F607D47350F469F /* Pods_kaganinaSHHUM.framework */; };
 		1C1FECD229BB2E1100D18911 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1FECD129BB2E1100D18911 /* InfoViewController.swift */; };
 		1C3D91AE296B173A009403ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3D91AD296B173A009403ED /* AppDelegate.swift */; };
 		1C3D91B0296B173A009403ED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3D91AF296B173A009403ED /* SceneDelegate.swift */; };
@@ -14,9 +15,16 @@
 		1C3D91BA296B173B009403ED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C3D91B8296B173B009403ED /* LaunchScreen.storyboard */; };
 		1C3D91C2296B1AF6009403ED /* PinLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3D91C1296B1AF6009403ED /* PinLibrary.swift */; };
 		1C3D91C7296B2361009403ED /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3D91C6296B2361009403ED /* Tag.swift */; };
-		1C4CBCB929BD356900187E92 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4CBCB829BD356900187E92 /* TabBarController.swift */; };
-		1C66F2D429ABD3B4007543DD /* DirectoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C66F2D329ABD3B4007543DD /* DirectoryViewController.swift */; };
 		1C766EE029BA09A500BF9CF5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C766EDF29BA09A500BF9CF5 /* ViewController.swift */; };
+		1C82C3EF29BE19F5004F7D50 /* RecordStoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C3EE29BE19F5004F7D50 /* RecordStoreViewController.swift */; };
+		1C82C3F129BE1A62004F7D50 /* RecordPlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C3F029BE1A62004F7D50 /* RecordPlayViewController.swift */; };
+		1C82C3F429BE1C7C004F7D50 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C3F329BE1C7C004F7D50 /* DatabaseManager.swift */; };
+		1C82C3F629BE1CC4004F7D50 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C3F529BE1CC4004F7D50 /* SignInViewController.swift */; };
+		1C82C3F829BE1CD8004F7D50 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C3F729BE1CD8004F7D50 /* SignUpViewController.swift */; };
+		1C82C3FA29BE1CFD004F7D50 /* CreateNewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C3F929BE1CFD004F7D50 /* CreateNewPostViewController.swift */; };
+		1C82C3FC29BE1D23004F7D50 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C3FB29BE1D23004F7D50 /* PostViewController.swift */; };
+		1C82C3FE29BE1D7E004F7D50 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C3FD29BE1D7E004F7D50 /* AuthManager.swift */; };
+		1C82C40029BE1DA3004F7D50 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C3FF29BE1DA3004F7D50 /* StorageManager.swift */; };
 		1CF14543296C5F1C00DDE53B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF14542296C5F1C00DDE53B /* ProfileViewController.swift */; };
 		1CF14545296C5FAE00DDE53B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF14544296C5FAE00DDE53B /* SearchViewController.swift */; };
 		1CF14547296C5FE900DDE53B /* RecorderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF14546296C5FE900DDE53B /* RecorderViewController.swift */; };
@@ -32,12 +40,22 @@
 		1C3D91BB296B173B009403ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1C3D91C1296B1AF6009403ED /* PinLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinLibrary.swift; sourceTree = "<group>"; };
 		1C3D91C6296B2361009403ED /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
-		1C4CBCB829BD356900187E92 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		1C66F2D329ABD3B4007543DD /* DirectoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryViewController.swift; sourceTree = "<group>"; };
 		1C766EDF29BA09A500BF9CF5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../../ViewController.swift; sourceTree = "<group>"; };
+		1C82C3EE29BE19F5004F7D50 /* RecordStoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordStoreViewController.swift; sourceTree = "<group>"; };
+		1C82C3F029BE1A62004F7D50 /* RecordPlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordPlayViewController.swift; sourceTree = "<group>"; };
+		1C82C3F329BE1C7C004F7D50 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		1C82C3F529BE1CC4004F7D50 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
+		1C82C3F729BE1CD8004F7D50 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		1C82C3F929BE1CFD004F7D50 /* CreateNewPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewPostViewController.swift; sourceTree = "<group>"; };
+		1C82C3FB29BE1D23004F7D50 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
+		1C82C3FD29BE1D7E004F7D50 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		1C82C3FF29BE1DA3004F7D50 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		1CF14542296C5F1C00DDE53B /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		1CF14544296C5FAE00DDE53B /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		1CF14546296C5FE900DDE53B /* RecorderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecorderViewController.swift; sourceTree = "<group>"; };
+		8286134AF5E1B5B6CDFF6DCC /* Pods-kaganinaSHHUM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kaganinaSHHUM.debug.xcconfig"; path = "Target Support Files/Pods-kaganinaSHHUM/Pods-kaganinaSHHUM.debug.xcconfig"; sourceTree = "<group>"; };
+		98568A09ADCBF3BEB5A3C650 /* Pods-kaganinaSHHUM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kaganinaSHHUM.release.xcconfig"; path = "Target Support Files/Pods-kaganinaSHHUM/Pods-kaganinaSHHUM.release.xcconfig"; sourceTree = "<group>"; };
+		CFDA7BC63F607D47350F469F /* Pods_kaganinaSHHUM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kaganinaSHHUM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16A0890AF4FB1F525EDE8633 /* Pods_kaganinaSHHUM.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,6 +75,8 @@
 			children = (
 				1C3D91AC296B173A009403ED /* kaganinaSHHUM */,
 				1C3D91AB296B173A009403ED /* Products */,
+				FB3A71673F97F972D4C80C4C /* Pods */,
+				2B395793779E6B14BF14FFC4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -70,12 +91,12 @@
 		1C3D91AC296B173A009403ED /* kaganinaSHHUM */ = {
 			isa = PBXGroup;
 			children = (
+				1C82C3F229BE1C57004F7D50 /* Manager */,
 				1C3D91C5296B1DCF009403ED /* Model */,
 				1C3D91C4296B1D9F009403ED /* Controller */,
 				1C3D91C3296B1AFD009403ED /* Library */,
 				1C3D91AD296B173A009403ED /* AppDelegate.swift */,
 				1C3D91AF296B173A009403ED /* SceneDelegate.swift */,
-				1C4CBCB829BD356900187E92 /* TabBarController.swift */,
 				1C3D91B6296B173B009403ED /* Assets.xcassets */,
 				1C3D91B8296B173B009403ED /* LaunchScreen.storyboard */,
 				1C3D91BB296B173B009403ED /* Info.plist */,
@@ -94,11 +115,11 @@
 		1C3D91C4296B1D9F009403ED /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				1C82C40229BE1E90004F7D50 /* Post */,
+				1C82C40129BE1E6F004F7D50 /* Auth */,
 				1C82C3ED29BE0760004F7D50 /* Recorder */,
 				1C1FECD129BB2E1100D18911 /* InfoViewController.swift */,
 				1C766EDF29BA09A500BF9CF5 /* ViewController.swift */,
-				1CF14546296C5FE900DDE53B /* RecorderViewController.swift */,
-				1C66F2D329ABD3B4007543DD /* DirectoryViewController.swift */,
 				1CF14544296C5FAE00DDE53B /* SearchViewController.swift */,
 				1CF14542296C5F1C00DDE53B /* ProfileViewController.swift */,
 			);
@@ -116,8 +137,57 @@
 		1C82C3ED29BE0760004F7D50 /* Recorder */ = {
 			isa = PBXGroup;
 			children = (
+				1C82C3EE29BE19F5004F7D50 /* RecordStoreViewController.swift */,
+				1C82C3F029BE1A62004F7D50 /* RecordPlayViewController.swift */,
+				1CF14546296C5FE900DDE53B /* RecorderViewController.swift */,
 			);
 			path = Recorder;
+			sourceTree = "<group>";
+		};
+		1C82C3F229BE1C57004F7D50 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				1C82C3F329BE1C7C004F7D50 /* DatabaseManager.swift */,
+				1C82C3FD29BE1D7E004F7D50 /* AuthManager.swift */,
+				1C82C3FF29BE1DA3004F7D50 /* StorageManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		1C82C40129BE1E6F004F7D50 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				1C82C3F529BE1CC4004F7D50 /* SignInViewController.swift */,
+				1C82C3F729BE1CD8004F7D50 /* SignUpViewController.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		1C82C40229BE1E90004F7D50 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				1C82C3FB29BE1D23004F7D50 /* PostViewController.swift */,
+				1C82C3F929BE1CFD004F7D50 /* CreateNewPostViewController.swift */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
+		2B395793779E6B14BF14FFC4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CFDA7BC63F607D47350F469F /* Pods_kaganinaSHHUM.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FB3A71673F97F972D4C80C4C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8286134AF5E1B5B6CDFF6DCC /* Pods-kaganinaSHHUM.debug.xcconfig */,
+				98568A09ADCBF3BEB5A3C650 /* Pods-kaganinaSHHUM.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -127,9 +197,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1C3D91BE296B173B009403ED /* Build configuration list for PBXNativeTarget "kaganinaSHHUM" */;
 			buildPhases = (
+				81801F5CE1E8E66E077BA9EA /* [CP] Check Pods Manifest.lock */,
 				1C3D91A6296B173A009403ED /* Sources */,
 				1C3D91A7296B173A009403ED /* Frameworks */,
 				1C3D91A8296B173A009403ED /* Resources */,
+				508E99977DAD39D63711C488 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -185,22 +257,71 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		508E99977DAD39D63711C488 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-kaganinaSHHUM/Pods-kaganinaSHHUM-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-kaganinaSHHUM/Pods-kaganinaSHHUM-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-kaganinaSHHUM/Pods-kaganinaSHHUM-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		81801F5CE1E8E66E077BA9EA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-kaganinaSHHUM-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1C3D91A6296B173A009403ED /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				1CF14543296C5F1C00DDE53B /* ProfileViewController.swift in Sources */,
+				1C82C3EF29BE19F5004F7D50 /* RecordStoreViewController.swift in Sources */,
+				1C82C3F129BE1A62004F7D50 /* RecordPlayViewController.swift in Sources */,
+				1C82C40029BE1DA3004F7D50 /* StorageManager.swift in Sources */,
 				1CF14545296C5FAE00DDE53B /* SearchViewController.swift in Sources */,
-				1C4CBCB929BD356900187E92 /* TabBarController.swift in Sources */,
-				1C66F2D429ABD3B4007543DD /* DirectoryViewController.swift in Sources */,
 				1C766EE029BA09A500BF9CF5 /* ViewController.swift in Sources */,
+				1C82C3F629BE1CC4004F7D50 /* SignInViewController.swift in Sources */,
 				1C1FECD229BB2E1100D18911 /* InfoViewController.swift in Sources */,
+				1C82C3FE29BE1D7E004F7D50 /* AuthManager.swift in Sources */,
 				1C3D91AE296B173A009403ED /* AppDelegate.swift in Sources */,
+				1C82C3FC29BE1D23004F7D50 /* PostViewController.swift in Sources */,
+				1C82C3F829BE1CD8004F7D50 /* SignUpViewController.swift in Sources */,
 				1CF14547296C5FE900DDE53B /* RecorderViewController.swift in Sources */,
+				1C82C3F429BE1C7C004F7D50 /* DatabaseManager.swift in Sources */,
 				1C3D91C7296B2361009403ED /* Tag.swift in Sources */,
 				1C3D91B0296B173A009403ED /* SceneDelegate.swift in Sources */,
 				1C3D91C2296B1AF6009403ED /* PinLibrary.swift in Sources */,
+				1C82C3FA29BE1CFD004F7D50 /* CreateNewPostViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,6 +455,7 @@
 		};
 		1C3D91BF296B173B009403ED /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8286134AF5E1B5B6CDFF6DCC /* Pods-kaganinaSHHUM.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -359,6 +481,7 @@
 		};
 		1C3D91C0296B173B009403ED /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 98568A09ADCBF3BEB5A3C650 /* Pods-kaganinaSHHUM.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
