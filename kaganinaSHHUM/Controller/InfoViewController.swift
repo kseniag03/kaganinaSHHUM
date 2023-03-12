@@ -296,6 +296,7 @@ struct News: Codable {
     let articles: [Article]
 }
 
+/*
 class UserSh: Codable {
     let name: String
 }
@@ -311,6 +312,7 @@ struct Post: Codable {
     }
     let articles: [Article]
 }
+*/
 
 //
 //  NewsCell.swift

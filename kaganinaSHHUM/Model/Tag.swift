@@ -4,7 +4,7 @@
 //
 
 import Foundation
-
+/*
 final class Subscribtion {
     let id: Int
     let userId: Int
@@ -108,3 +108,4 @@ final class LikeTag {
         self.tagId = tagId
     }
 }
+*/
