@@ -9,7 +9,6 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .red
-        
         //setupView()
         //setupNavBar()
     }

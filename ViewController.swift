@@ -17,14 +17,69 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         self.view.backgroundColor = .systemGray6
-        //setupView()
+        setupView()
     }
-    /*
+    
     private func setupView() {
         self.view.backgroundColor = .systemGray6
+        let button = makeMenuButton(title: "TABS")
+        button.addTarget(
+            self,
+            action: #selector(openTabBarController),
+            for: .touchUpInside
+        )
+        self.view.addSubview(button)
+        button.pinLeft(to: self.view, self.view.frame.size.width / 10)
+        button.pinRight(to: self.view, self.view.frame.size.width / 10)
+        button.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
         //setupMenuButtons()
     }
     
+    @objc
+    private func openTabBarController() {
+        let tabBarVC = UITabBarController()
+        tabBarVC.tabBar.backgroundColor = .white
+        
+        let mainController = UINavigationController(rootViewController: MainViewController())
+        mainController.title = "Лента"
+        let searchController = UINavigationController(rootViewController: SearchViewController())
+        searchController.title = "Поиск"
+        let recorderController = UINavigationController(rootViewController: RecorderViewController())
+        recorderController.title = "Рекордер"
+        let profileController = UINavigationController(rootViewController: ProfileViewController())
+        profileController.title = "Профиль"
+        
+        tabBarVC.setViewControllers(
+            [
+                mainController,
+                searchController,
+                recorderController,
+                profileController
+            ],
+            animated: false)
+        
+        guard let items = tabBarVC.tabBar.items else { return }
+        let images = [ "house.fill", "magnifyingglass", "mic.fill", "person.circle.fill"]
+        for i in 0..<items.count {
+            items[i].image = UIImage(systemName: images[i])
+        }
+        
+        tabBarVC.modalPresentationStyle = .fullScreen
+        present(tabBarVC, animated: true)
+    }
+    
+    private func makeMenuButton(title: String) -> UIButton {
+        let button = UIButton()
+        button.setTitle(title, for: .normal)
+        button.setTitleColor(.systemGray, for: .normal)
+        button.layer.cornerRadius = 12
+        button.titleLabel?.font = .systemFont(ofSize: 16.0, weight: .medium)
+        button.backgroundColor = .white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.heightAnchor.constraint(equalTo: button.widthAnchor).isActive = true
+        return button
+    }
+/*
     private func setupMenuButtons() {
         let mainScreenButton = makeMenuButton(title: "MAIN")
         mainScreenButton.addTarget(
@@ -64,18 +119,6 @@ class ViewController: UIViewController {
         buttonsStackView.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
     }
     
-    private func makeMenuButton(title: String) -> UIButton {
-        let button = UIButton()
-        button.setTitle(title, for: .normal)
-        button.setTitleColor(.systemGray, for: .normal)
-        button.layer.cornerRadius = 12
-        button.titleLabel?.font = .systemFont(ofSize: 16.0, weight: .medium)
-        button.backgroundColor = .white
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.heightAnchor.constraint(equalTo: button.widthAnchor).isActive = true
-        return button
-    }
-
     @objc
     private func mainScreenButtonPressed() {
         //updateMain throght infoviewctrl

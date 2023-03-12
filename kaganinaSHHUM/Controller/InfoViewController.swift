@@ -13,7 +13,8 @@ import UIKit
 
 import AVFoundation
 
-final class NewsViewController: UIViewController {
+final class MainViewController: UIViewController {
+    
     private var imageView = UIImageView()
     private var titleLabel = UILabel()
     private var descriptionLabel = UILabel()
@@ -24,7 +25,8 @@ final class NewsViewController: UIViewController {
     }
     
     private func setupUI() {
-        view.backgroundColor = .systemBackground
+        self.view.backgroundColor = .systemBackground
+        
         setupNavbar()
         setImageView()
         setTitleLabel()
@@ -251,7 +253,7 @@ extension NewsListViewController: UITableViewDataSource {
 extension NewsListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if !isLoading {
-            let newsVC = NewsViewController()
+            let newsVC = MainViewController()
             newsVC.configure(with: newsViewModels[indexPath.row])
             navigationController?.pushViewController(newsVC, animated: true)
         }

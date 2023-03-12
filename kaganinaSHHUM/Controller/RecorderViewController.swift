@@ -8,7 +8,262 @@ import UIKit
 //import AVFAudio
 import AVFoundation
 
-final class RecorderViewController: UIViewController {/*
+struct Record: Codable {
+    var recordURL: URL
+}
+
+protocol AddRecordDelegate {
+    func newRecordAdded(record: Record)
+}
+
+final class AddRecordCell: UITableViewCell {
+    
+    static let reuseIdentifier = "AddRecordCell"
+    //private var textView = UITextView()
+    //public var addButton = UIButton()
+    
+    public var delegate: AddRecordDelegate?
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        self.selectionStyle = .none
+       // setupView()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+    }
+    
+    @available (*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+final class RecordCell : UITableViewCell {
+    static let reuseIdentifier = "RecordCell"
+    
+    private var textlabel = UILabel()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        self.selectionStyle = .none
+        setupView()
+    }
+    
+    @available (*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+    }
+    
+    private func setupView() {
+        contentView.backgroundColor = .systemBackground
+        
+        textlabel.font = .systemFont(ofSize: 16, weight: .regular)
+        textlabel.textColor = .label
+        textlabel.numberOfLines = 0
+        textlabel.backgroundColor = .clear
+        
+        contentView.addSubview(textlabel)
+        textlabel.pinTop(to: contentView.safeAreaLayoutGuide.topAnchor)
+        textlabel.pinLeft(to: contentView, 16)
+        textlabel.pinRight(to: contentView, 16)
+        textlabel.pinHeight(to: contentView.safeAreaLayoutGuide.heightAnchor)
+    }
+    
+    public func configure(_ record: Record) {
+        let fileName = record.recordURL.deletingPathExtension().lastPathComponent
+        print("!!!&&&%%%!!!")
+        print(fileName)
+        textlabel.text = "Запись " + fileName
+    }
+}
+
+final class RecordStoreViewController: UIViewController {
+    
+    var recordsTableView = UITableView(frame: .zero, style: .insetGrouped)
+    
+    // file for current simulation (different list of notes for different devices)
+    private let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        .appendingPathComponent("records.json")
+    
+    private var dataSource: [Record] {
+        set {
+            if let data = try? JSONEncoder().encode(newValue) {
+                do {
+                    let records = String(data: data, encoding: .utf8)
+                    try records?.write(to: path, atomically: false, encoding: .utf8)
+                } catch {
+                    print("Could not save new data")
+                }
+            }
+        }
+        get {
+            if let data = try? Data(contentsOf: path) {
+                if let records = try? JSONDecoder().decode([Record].self, from: data) {
+                    return records
+                }
+            }
+            return [Record]()
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = .darkGray
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupView()
+        
+        print(dataSource.count)
+        print(recordsTableView.contentSize)
+    }
+     
+    private func setupView() {
+        setupTableView()
+        setupNavBar()
+    }
+    
+    private func setupTableView() {
+        recordsTableView.register(RecordCell.self, forCellReuseIdentifier: RecordCell.reuseIdentifier)
+        recordsTableView.register(AddRecordCell.self, forCellReuseIdentifier: AddRecordCell.reuseIdentifier)
+        self.view.addSubview(recordsTableView)
+        recordsTableView.backgroundColor = .clear
+        recordsTableView.keyboardDismissMode = .onDrag
+        recordsTableView.dataSource = self
+        recordsTableView.delegate = self
+                
+        self.view.addSubview(self.recordsTableView)
+        recordsTableView.pinTop(to: self.view.topAnchor)
+        recordsTableView.pinLeft(to: self.view, self.view.frame.width / 10)
+        recordsTableView.pinRight(to: self.view, self.view.frame.width / 10)
+        recordsTableView.pinHeight(to: self.view.safeAreaLayoutGuide.heightAnchor)
+        
+        recordsTableView.reloadData()
+    }
+    
+    private func setupNavBar() {
+        self.title = "RECORD LIST"
+    }
+    
+    private func handleDelete(indexPath: IndexPath) {
+        dataSource.remove(at: indexPath.row)
+        recordsTableView.reloadData()
+    }
+}
+/*
+extension RecordStoreViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return numberOfRecords
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = String(indexPath.row + 1)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let path = getDirectory().appendingPathComponent("\(indexPath.row + 1).m4a", conformingTo: .url)
+        
+        do {
+            player = try AVAudioPlayer(contentsOf: path)
+            player?.play()
+        } catch {
+            
+        }
+    }
+} */
+
+extension RecordStoreViewController: UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
+        switch section {
+        case 0:
+            return 1
+        default:
+            return dataSource.count
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print()
+        print()
+        print()
+        print(indexPath)
+        print(dataSource.count)
+        print(recordsTableView.contentSize)
+        print()
+        print()
+        print()
+        
+        switch indexPath.section {
+        case 0:
+            if let addNewCell = tableView.dequeueReusableCell(withIdentifier: AddRecordCell.reuseIdentifier, for: indexPath) as? AddRecordCell {
+                
+                addNewCell.textLabel?.text = String(indexPath.row + 1)
+                addNewCell.delegate = self
+                return addNewCell
+            }
+        default:
+            let record = dataSource[indexPath.row]
+            if let recordCell = tableView.dequeueReusableCell(withIdentifier: RecordCell.reuseIdentifier, for: indexPath) as? RecordCell {
+                recordCell.configure(record)
+                return recordCell
+            }
+        }
+        
+        return UITableViewCell()
+    }
+}
+
+extension RecordStoreViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(
+            style: .destructive,
+            title: .none
+        ) {
+            [weak self] (action, view, completion) in
+            self?.handleDelete(indexPath: indexPath)
+            completion(true)
+        }
+        deleteAction.image = UIImage(
+            systemName: "trash.fill",
+            withConfiguration: UIImage.SymbolConfiguration(weight: .bold)
+        )?.withTintColor(.white)
+        deleteAction.backgroundColor = .red
+        return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
+}
+
+extension RecordStoreViewController: AddRecordDelegate {
+    func newRecordAdded(record: Record) {
+        dataSource.insert(record, at: 0)
+        recordsTableView.reloadData()
+        print("successfully added")
+    }
+}
+
+
+
+//-----------------------------------------------
+
+final class RecorderViewController: UIViewController {
+    
     var recordingSession: AVAudioSession?
     var recorder: AVAudioRecorder?
     var player: AVAudioPlayer?
@@ -22,17 +277,15 @@ final class RecorderViewController: UIViewController {/*
     var recordStopButton = UIButton()
     var playRecordButton = UIButton()
     
-    var recordsTableView = UITableView()*/
+    let recordStoreController = RecordStoreViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .blue
-        
-        //setupView()
-        //setupNavBar()
+        self.view.backgroundColor = .darkGray
+        setupView()
+        setupNavBar()
         
         //print("6666")
-        /*
         
         recordingSession = AVAudioSession.sharedInstance()
         
@@ -51,16 +304,16 @@ final class RecorderViewController: UIViewController {/*
             print("unknown")
         }
         
-        /*
+/*
         AVAudioSession.sharedInstance().requestRecordPermission { (hasPermission) in
             if hasPermission {
                 print("ACCEPTED")
             }
         }*/
         
-        setupRecorder()*/
+        setupRecorder()
     }
-    /*
+    
     private func makeMenuButton(title: String) -> UIButton {
         let button = UIButton()
         button.setTitle(title, for: .normal)
@@ -85,6 +338,7 @@ final class RecorderViewController: UIViewController {/*
     
     private func setupView() {
         self.view.backgroundColor = .blue
+
         
         recordStartButton = makeMenuButton(title: "START")
         recordStartButton.addTarget(
@@ -127,23 +381,26 @@ final class RecorderViewController: UIViewController {/*
     }
     
     private func setupNavBar() {
-        self.title = "RECORDER"
-        let closeButton = UIButton(type: .close)
-        closeButton.layer.cornerRadius = 12
-        closeButton.addTarget(
-            self,
-            action: #selector(dismissViewController(_:)),
-            for: .touchUpInside
-        )
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
+         navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "List",
+            image: UIImage(systemName: "arrow.clockwise"),
+            target: self,
+            action: #selector(navBarButtonPressed))
+        navigationItem.rightBarButtonItem?.tintColor = .label
+    }
+    
+    @objc
+    private func navBarButtonPressed(_ sender: UIButton) {
+        recordStoreController.view.backgroundColor = .systemPurple
+        navigationController?.pushViewController(recordStoreController, animated: true)
     }
     
     @objc
     private func dismissViewController(_ sender: UIViewController) {
         self.dismiss(animated: true)
-    }*/
+    }
 }
-/*
+
 extension RecorderViewController {
     
     private func getDirectory() -> URL {
@@ -169,32 +426,6 @@ extension RecorderViewController {
         alert.addAction(UIAlertAction(title: "dismiss", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
-    
-}
-
-extension RecorderViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return numberOfRecords
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = String(indexPath.row + 1)
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let path = getDirectory().appendingPathComponent("\(indexPath.row + 1).m4a", conformingTo: .url)
-        
-        do {
-            player = try AVAudioPlayer(contentsOf: path)
-            player?.play()
-        } catch {
-            
-        }
-    }
-    
     
 }
 
@@ -227,7 +458,7 @@ extension RecorderViewController: AVAudioRecorderDelegate {
             recorder = nil
             
             UserDefaults.standard.set(numberOfRecords, forKey: numberStoreKey)
-            recordsTableView.reloadData()
+            //recordsTableView.reloadData()
             
             recordStartButton.setTitle("Start", for: .normal)
         }
@@ -269,6 +500,8 @@ extension RecorderViewController: AVAudioRecorderDelegate {
         
         recorder?.stop()
         
+        
+        
         recordStartButton.setTitle("START", for: .normal)
         
         playRecordButton.isEnabled = true
@@ -278,6 +511,11 @@ extension RecorderViewController: AVAudioRecorderDelegate {
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         playRecordButton.isEnabled = true
         changeButtonState(button: playRecordButton)
+        
+        print("FINISH RECORDING!!!!!!!!")
+        let fileName = getDirectory().appendingPathComponent("\(numberOfRecords).m4a", conformingTo: .url)
+        print(fileName)
+        recordStoreController.newRecordAdded(record: Record(recordURL: fileName))
     }
 }
 
@@ -285,7 +523,8 @@ extension RecorderViewController: AVAudioPlayerDelegate {
     
     private func preparePlayer() {
         do {
-            player = try AVAudioPlayer(contentsOf: getFileURL(fileName: file))
+            let fileName = getDirectory().appendingPathComponent("\(numberOfRecords).m4a", conformingTo: .url)
+            player = try AVAudioPlayer(contentsOf: fileName)
             player?.delegate = self
             player?.prepareToPlay()
             player?.volume = 1.0
@@ -326,7 +565,7 @@ extension RecorderViewController: AVAudioPlayerDelegate {
         playRecordButton.setTitle("PLAY", for: .normal)
     }
 }
-*/
+
 // возможность сохранять аудио
 // возможность записать несколько аудио
 // хранить записанные аудио не в кэше

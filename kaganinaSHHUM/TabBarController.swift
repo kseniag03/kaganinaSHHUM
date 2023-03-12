@@ -6,7 +6,7 @@
 import Foundation
 import UIKit
 
-
+/*
 final class TabBarController: UITabBarController {
     /*
     private enum TabBarItem: Int {
@@ -46,13 +46,13 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
+        self.view.backgroundColor = .tintColor
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let firstViewController = ViewController()
+        /*let firstViewController = ViewController()
         let secondViewController = SearchViewController()
         let thirdViewController = RecorderViewController()
         let fourthViewController = ProfileViewController()
@@ -65,7 +65,7 @@ final class TabBarController: UITabBarController {
         //self.viewControllers = [firstViewController, secondViewController, thirdViewController, fourthViewController]
         
         self.viewControllers?.append(firstViewController)
-        
+        */
         
         //self.setupTabBar()
     }
@@ -107,3 +107,4 @@ final class TabBarController: UITabBarController {
 */
 }
 
+*/
