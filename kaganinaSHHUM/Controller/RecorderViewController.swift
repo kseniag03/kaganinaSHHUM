@@ -3,12 +3,11 @@
 //  kaganinaSHHUM
 //
 
+import AVFoundation
 import Foundation
 import UIKit
-//import AVFAudio
-import AVFoundation
 
-struct Record: Codable {
+struct Record: Codable, Equatable {
     var recordURL: URL
 }
 
@@ -19,16 +18,12 @@ protocol AddRecordDelegate {
 final class AddRecordCell: UITableViewCell {
     
     static let reuseIdentifier = "AddRecordCell"
-    //private var textView = UITextView()
-    //public var addButton = UIButton()
     
     public var delegate: AddRecordDelegate?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         self.selectionStyle = .none
-       // setupView()
     }
     
     override func layoutSubviews() {
@@ -41,14 +36,39 @@ final class AddRecordCell: UITableViewCell {
     }
 }
 
-final class RecordCell : UITableViewCell {
+protocol PlayRecordDelegate {
+    func playRecord(record: Record, player: inout AVAudioPlayer?)
+}
+
+final class PlayRecordCell: UITableViewCell {
+    
+    static let reuseIdentifier = "PlayRecordCell"
+    
+    public var delegate: PlayRecordDelegate?
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.selectionStyle = .none
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+    }
+    
+    @available (*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+final class RecordCell: UITableViewCell {
+    
     static let reuseIdentifier = "RecordCell"
     
     private var textlabel = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         self.selectionStyle = .none
         setupView()
     }
@@ -135,6 +155,7 @@ final class RecordStoreViewController: UIViewController {
     private func setupTableView() {
         recordsTableView.register(RecordCell.self, forCellReuseIdentifier: RecordCell.reuseIdentifier)
         recordsTableView.register(AddRecordCell.self, forCellReuseIdentifier: AddRecordCell.reuseIdentifier)
+        recordsTableView.register(PlayRecordCell.self, forCellReuseIdentifier: PlayRecordCell.reuseIdentifier)
         self.view.addSubview(recordsTableView)
         recordsTableView.backgroundColor = .clear
         recordsTableView.keyboardDismissMode = .onDrag
@@ -202,13 +223,9 @@ extension RecordStoreViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print()
-        print()
-        print()
         print(indexPath)
         print(dataSource.count)
         print(recordsTableView.contentSize)
-        print()
-        print()
         print()
         
         switch indexPath.section {
@@ -248,6 +265,12 @@ extension RecordStoreViewController: UITableViewDelegate {
         deleteAction.backgroundColor = .red
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let playController = RecordPlayViewController()
+        playController.setFileName(number: indexPath.row + 1)
+        navigationController?.pushViewController(playController, animated: true)
+    }
 }
 
 extension RecordStoreViewController: AddRecordDelegate {
@@ -258,6 +281,26 @@ extension RecordStoreViewController: AddRecordDelegate {
     }
 }
 
+extension RecordStoreViewController: PlayRecordDelegate {
+    func playRecord(record: Record, player: inout AVAudioPlayer?) {
+        if let index = dataSource.firstIndex(where: { $0 == record }) {
+            // `index` now contains the index of the object in the data source
+            print("Found object at index \(index)")
+            
+            do {
+                player = try AVAudioPlayer(contentsOf: record.recordURL)
+                player?.play()
+            } catch {
+                
+            }
+            
+        } else {
+            // The object wasn't found in the data source
+            print("Object not found")
+        }
+        
+    }
+}
 
 
 //-----------------------------------------------
@@ -266,7 +309,7 @@ final class RecorderViewController: UIViewController {
     
     var recordingSession: AVAudioSession?
     var recorder: AVAudioRecorder?
-    var player: AVAudioPlayer?
+//    var player: AVAudioPlayer?
     
     var numberOfRecords: Int = 0
     
@@ -355,11 +398,11 @@ final class RecorderViewController: UIViewController {
         )
         
         playRecordButton = makeMenuButton(title: "PLAY")
-        playRecordButton.addTarget(
+        /*playRecordButton.addTarget(
             self,
             action: #selector(playRecord),
             for: .touchUpInside
-        )
+        )*/
         
         recordStopButton.isEnabled = false
         changeButtonState(button: recordStopButton)
@@ -408,7 +451,7 @@ extension RecorderViewController {
         let documentDirectory = paths[0]
         return documentDirectory
     }
-    
+/*
     private func getCacheDirectory() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
         return paths[0]
@@ -419,7 +462,7 @@ extension RecorderViewController {
         let filePath = URL(fileURLWithPath: path)
         return filePath
     }
-    
+  */
     
     private func displayAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -518,7 +561,7 @@ extension RecorderViewController: AVAudioRecorderDelegate {
         recordStoreController.newRecordAdded(record: Record(recordURL: fileName))
     }
 }
-
+/*
 extension RecorderViewController: AVAudioPlayerDelegate {
     
     private func preparePlayer() {
@@ -565,8 +608,150 @@ extension RecorderViewController: AVAudioPlayerDelegate {
         playRecordButton.setTitle("PLAY", for: .normal)
     }
 }
+*/
 
 // возможность сохранять аудио
 // возможность записать несколько аудио
 // хранить записанные аудио не в кэше
 // синхронизация с облаком
+
+protocol SetFileName {
+    func setFileName(number: Int)
+}
+
+extension RecordPlayViewController: SetFileName {
+    
+    private func getDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentDirectory = paths[0]
+        return documentDirectory
+    }
+    
+    func setFileName(number: Int) {
+        fileName = getDirectory().appendingPathComponent("\(number).m4a", conformingTo: .url)
+    }
+}
+
+final class RecordPlayViewController: UIViewController {
+    
+    private var player: AVAudioPlayer?
+    
+    private var recordPlayButton = UIButton()
+    private var recordStopPlayButton = UIButton()
+    
+    private var fileName: URL? = nil
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = .link
+        setupView()
+        setupNavBar()
+    }
+    
+    private func makeMenuButton(title: String) -> UIButton {
+        let button = UIButton()
+        button.setTitle(title, for: .normal)
+        button.setTitleColor(.systemGray, for: .normal)
+        button.layer.cornerRadius = 12
+        button.titleLabel?.font = .systemFont(ofSize: 16.0, weight: .medium)
+        button.backgroundColor = .white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.heightAnchor.constraint(equalTo: button.widthAnchor).isActive = true
+        return button
+    }
+    
+    private func changeButtonState(button: UIButton) {
+        if !button.isEnabled {
+            button.setImage(UIImage(named: "play.fill"), for: .normal)
+        } else {
+            button.setImage(UIImage(named: "pause.fill"), for: .normal)
+        }
+    }
+    
+    private func setupView() {
+
+        recordPlayButton = makeMenuButton(title: "")
+        recordPlayButton.setImage(UIImage(named: "play.fill"), for: .normal)
+        recordPlayButton.addTarget(
+            self,
+            action: #selector(playRecord),
+            for: .touchUpInside
+        )
+        
+        recordStopPlayButton = makeMenuButton(title: "")
+        recordStopPlayButton.setImage(UIImage(named: "stop.fill"), for: .normal)
+        recordStopPlayButton.addTarget(
+            self,
+            action: #selector(stopPlayRecord),
+            for: .touchUpInside
+        )
+        /*
+        self.view.addSubview(recordPlayButton)
+        recordPlayButton.pinLeft(to: self.view, self.view.frame.size.width / 10)
+        recordPlayButton.pinRight(to: self.view, self.view.frame.size.width / 10)
+        recordPlayButton.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)*/
+        
+        
+        let buttonsSV = UIStackView(arrangedSubviews: [
+            recordPlayButton, recordStopPlayButton
+        ])
+        buttonsSV.spacing = 12
+        buttonsSV.axis = .horizontal
+        buttonsSV.distribution = .fillEqually
+
+        self.view.addSubview(buttonsSV)
+        buttonsSV.pinTop(to: self.view.safeAreaLayoutGuide.topAnchor)
+        buttonsSV.pinLeft(to: self.view, self.view.frame.width / 10)
+        buttonsSV.pinRight(to: self.view, self.view.frame.width / 10)
+        buttonsSV.pinHeight(to: self.view.safeAreaLayoutGuide.heightAnchor)
+    }
+    
+    private func setupNavBar() {
+        self.title = "RECORD PLAY"
+    }
+}
+
+
+extension RecordPlayViewController: AVAudioPlayerDelegate {
+    
+    private func preparePlayer() {
+        do {
+            guard let fileName = self.fileName else { return }
+            player = try AVAudioPlayer(contentsOf: fileName)
+            player?.delegate = self
+            player?.prepareToPlay()
+            player?.volume = 1.0
+        } catch {
+            print("^^^^^^^ smth is wrong\n")
+        }
+    }
+    
+    @objc
+    private func playRecord() {
+        if let player = self.player {
+            if player.isPlaying {
+                player.pause()
+                recordPlayButton.setImage(UIImage(named: "play.fill"), for: .normal)
+            } else {
+                player.play()
+                recordPlayButton.setImage(UIImage(named: "pause.fill"), for: .normal)
+            }
+        } else {
+            preparePlayer()
+            player?.play()
+            recordPlayButton.setImage(UIImage(named: "pause.fill"), for: .normal)
+        }
+    }
+    
+    @objc
+    private func stopPlayRecord() {
+        player?.stop()
+        recordPlayButton.setImage(UIImage(named: "play.fill"), for: .normal)
+        recordStopPlayButton.isEnabled = false
+    }
+    
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        recordPlayButton.setImage(UIImage(named: "play.fill"), for: .normal)
+        recordStopPlayButton.isEnabled = false
+    }
+}
