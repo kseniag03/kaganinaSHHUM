@@ -318,7 +318,6 @@ final class RecorderViewController: UIViewController {
     
     var recordStartButton = UIButton()
     var recordStopButton = UIButton()
-    var playRecordButton = UIButton()
     
     let recordStoreController = RecordStoreViewController()
     
@@ -327,8 +326,6 @@ final class RecorderViewController: UIViewController {
         self.view.backgroundColor = .darkGray
         setupView()
         setupNavBar()
-        
-        //print("6666")
         
         recordingSession = AVAudioSession.sharedInstance()
         
@@ -346,13 +343,6 @@ final class RecorderViewController: UIViewController {
         default:
             print("unknown")
         }
-        
-/*
-        AVAudioSession.sharedInstance().requestRecordPermission { (hasPermission) in
-            if hasPermission {
-                print("ACCEPTED")
-            }
-        }*/
         
         setupRecorder()
     }
@@ -382,7 +372,6 @@ final class RecorderViewController: UIViewController {
     private func setupView() {
         self.view.backgroundColor = .blue
 
-        
         recordStartButton = makeMenuButton(title: "START")
         recordStartButton.addTarget(
             self,
@@ -397,20 +386,11 @@ final class RecorderViewController: UIViewController {
             for: .touchUpInside
         )
         
-        playRecordButton = makeMenuButton(title: "PLAY")
-        /*playRecordButton.addTarget(
-            self,
-            action: #selector(playRecord),
-            for: .touchUpInside
-        )*/
-        
         recordStopButton.isEnabled = false
         changeButtonState(button: recordStopButton)
-        playRecordButton.isEnabled = false
-        changeButtonState(button: playRecordButton)
         
         let buttonsSV = UIStackView(arrangedSubviews: [
-            recordStartButton, recordStopButton, playRecordButton
+            recordStartButton, recordStopButton
         ])
         buttonsSV.spacing = 12
         buttonsSV.axis = .vertical
@@ -426,7 +406,7 @@ final class RecorderViewController: UIViewController {
     private func setupNavBar() {
          navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: "List",
-            image: UIImage(systemName: "arrow.clockwise"),
+            image: UIImage(systemName: "music.note.list"),
             target: self,
             action: #selector(navBarButtonPressed))
         navigationItem.rightBarButtonItem?.tintColor = .label
@@ -506,16 +486,11 @@ extension RecorderViewController: AVAudioRecorderDelegate {
             recordStartButton.setTitle("Start", for: .normal)
         }
         
-        
-        
     }
     
     @objc
     private func startRecording() {
         self.view.backgroundColor = .systemTeal
-        
-        playRecordButton.isEnabled = false
-        changeButtonState(button: playRecordButton)
         
         if recordStartButton.titleLabel?.text == "START" {
             recordStopButton.isEnabled = true
@@ -543,19 +518,15 @@ extension RecorderViewController: AVAudioRecorderDelegate {
         
         recorder?.stop()
         
-        
-        
         recordStartButton.setTitle("START", for: .normal)
-        
-        playRecordButton.isEnabled = true
-        changeButtonState(button: playRecordButton)
     }
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        playRecordButton.isEnabled = true
-        changeButtonState(button: playRecordButton)
         
         print("FINISH RECORDING!!!!!!!!")
+        
+        numberOfRecords += 1
+        
         let fileName = getDirectory().appendingPathComponent("\(numberOfRecords).m4a", conformingTo: .url)
         print(fileName)
         recordStoreController.newRecordAdded(record: Record(recordURL: fileName))
@@ -611,7 +582,6 @@ extension RecorderViewController: AVAudioPlayerDelegate {
 */
 
 // возможность сохранять аудио
-// возможность записать несколько аудио
 // хранить записанные аудио не в кэше
 // синхронизация с облаком
 
@@ -685,12 +655,6 @@ final class RecordPlayViewController: UIViewController {
             action: #selector(stopPlayRecord),
             for: .touchUpInside
         )
-        /*
-        self.view.addSubview(recordPlayButton)
-        recordPlayButton.pinLeft(to: self.view, self.view.frame.size.width / 10)
-        recordPlayButton.pinRight(to: self.view, self.view.frame.size.width / 10)
-        recordPlayButton.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)*/
-        
         
         let buttonsSV = UIStackView(arrangedSubviews: [
             recordPlayButton, recordStopPlayButton
@@ -700,10 +664,10 @@ final class RecordPlayViewController: UIViewController {
         buttonsSV.distribution = .fillEqually
 
         self.view.addSubview(buttonsSV)
-        buttonsSV.pinTop(to: self.view.safeAreaLayoutGuide.topAnchor)
         buttonsSV.pinLeft(to: self.view, self.view.frame.width / 10)
         buttonsSV.pinRight(to: self.view, self.view.frame.width / 10)
-        buttonsSV.pinHeight(to: self.view.safeAreaLayoutGuide.heightAnchor)
+        buttonsSV.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
+        //buttonsSV.pinHeight(to: self.view.safeAreaLayoutGuide.heightAnchor)
     }
     
     private func setupNavBar() {
@@ -716,7 +680,10 @@ extension RecordPlayViewController: AVAudioPlayerDelegate {
     
     private func preparePlayer() {
         do {
+            print("!!!")
             guard let fileName = self.fileName else { return }
+            print(fileName)
+            print("!!!")
             player = try AVAudioPlayer(contentsOf: fileName)
             player?.delegate = self
             player?.prepareToPlay()
