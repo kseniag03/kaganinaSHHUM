@@ -9,6 +9,20 @@ import UIKit
 
 final class RecorderViewController: UIViewController {
     
+    private let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        .appendingPathComponent("records.json")
+    
+    private var dataSource: [Record] {
+        get {
+            if let data = try? Data(contentsOf: path) {
+                if let records = try? JSONDecoder().decode([Record].self, from: data) {
+                    return records
+                }
+            }
+            return [Record]()
+        }
+    }
+    
     var recordingSession: AVAudioSession?
     var recorder: AVAudioRecorder?
     
@@ -22,20 +36,30 @@ final class RecorderViewController: UIViewController {
     
     let recordStoreController = RecordStoreViewController()
     
+    private func clearRecordsNumber() {
+        UserDefaults.standard.removeObject(forKey: numberStoreKey)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .darkGray
-        
-        UserDefaults.standard.set(numberOfRecords, forKey: numberStoreKey)
         
         setupView()
         setupNavBar()
         
         recordingSession = AVAudioSession.sharedInstance()
         
+        if dataSource.isEmpty {
+            clearRecordsNumber()
+        }
         if let number: Int = UserDefaults.standard.object(forKey: numberStoreKey) as? Int {
             numberOfRecords = number
         }
+        if (numberOfRecords == 0) {
+            numberOfRecords += 1
+        }
+        
+        print("!!!!!!!!! number of records got : " + String(numberOfRecords))
         
         switch recordingSession?.recordPermission {
         case .granted:
@@ -47,8 +71,6 @@ final class RecorderViewController: UIViewController {
         default:
             print("unknown")
         }
-        
-        setupRecorder()
     }
     
     private func makeMenuButton(title: String) -> UIButton {
@@ -135,18 +157,6 @@ extension RecorderViewController {
         let documentDirectory = paths[0]
         return documentDirectory
     }
-/*
-    private func getCacheDirectory() -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
-        return paths[0]
-    }
-    
-    private func getFileURL(fileName: String) -> URL {
-        let path = (getCacheDirectory() as NSString).appendingPathComponent(fileName)
-        let filePath = URL(fileURLWithPath: path)
-        return filePath
-    }
-  */
     
     private func displayAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -161,7 +171,9 @@ extension RecorderViewController: AVAudioRecorderDelegate {
     private func setupRecorder() {
         
         if recorder == nil {
-            numberOfRecords += 1
+            //numberOfRecords += 1
+            //UserDefaults.standard.set(numberOfRecords, forKey: numberStoreKey)
+            
             let fileName = getDirectory().appendingPathComponent("\(numberOfRecords).m4a", conformingTo: .url)
             
             let recordSettings = [AVFormatIDKey: kAudioFormatAppleLossless,
@@ -171,7 +183,7 @@ extension RecorderViewController: AVAudioRecorderDelegate {
                 AVSampleRateKey: 44100.0 ] as [String : Any]
             
             do {
-                recorder = try AVAudioRecorder(url: fileName/*getFileURL(fileName: file)*/, settings: recordSettings as [String : Any])
+                recorder = try AVAudioRecorder(url: fileName, settings: recordSettings as [String : Any])
                 recorder?.delegate = self
                 recorder?.prepareToRecord()
             } catch {
@@ -179,7 +191,6 @@ extension RecorderViewController: AVAudioRecorderDelegate {
                 print("!!!!!! smth is wrong\n")
             }
         } else {
-            // stop recording
             recorder?.stop()
             recorder = nil
         }
@@ -189,6 +200,10 @@ extension RecorderViewController: AVAudioRecorderDelegate {
     @objc
     private func startRecording() {
         self.view.backgroundColor = .systemTeal
+        
+        if recorder == nil {
+            setupRecorder()
+        }
         
         if recordStartButton.titleLabel?.text == "START" {
             recordStopButton.isEnabled = true
@@ -223,15 +238,19 @@ extension RecorderViewController: AVAudioRecorderDelegate {
         
         print("FINISH RECORDING!!!!!!!!")
         
-        numberOfRecords += 1
-        
         let fileName = getDirectory().appendingPathComponent("\(numberOfRecords).m4a", conformingTo: .url)
+        
+        numberOfRecords += 1
+        UserDefaults.standard.set(numberOfRecords, forKey: numberStoreKey)
+        
         print(fileName)
         recordStoreController.newRecordAdded(record: Record(recordURL: fileName))
     }
 }
 
 // возможность сохранять аудио
+// загрузка аудио с устройства
 // хранить записанные аудио не в кэше
 // синхронизация с облаком
+// публикация поста с аудио
 

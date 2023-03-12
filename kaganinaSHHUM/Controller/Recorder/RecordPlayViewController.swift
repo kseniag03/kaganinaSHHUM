@@ -8,7 +8,7 @@ import Foundation
 import UIKit
 
 protocol SetFileName {
-    func setFileName(number: Int)
+    func setFileName(record: Record)
 }
 
 extension RecordPlayViewController: SetFileName {
@@ -19,8 +19,8 @@ extension RecordPlayViewController: SetFileName {
         return documentDirectory
     }
     
-    func setFileName(number: Int) {
-        fileName = getDirectory().appendingPathComponent("\(number).m4a", conformingTo: .url)
+    func setFileName(record: Record) {
+        fileName = record.recordURL
     }
 }
 
@@ -117,6 +117,7 @@ extension RecordPlayViewController: AVAudioPlayerDelegate {
     
     @objc
     private func playRecord() {
+        recordStopPlayButton.isEnabled = true
         if let player = self.player {
             if player.isPlaying {
                 player.pause()
