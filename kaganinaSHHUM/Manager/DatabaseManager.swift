@@ -32,7 +32,8 @@ final class DatabaseManager {
         
         database
             .collection("users")
-            .document(documentId).getDocument { snapshot, error in
+            .document(documentId)
+            .getDocument { snapshot, error in
                 guard let data = snapshot?.data() as? [String: String],
                       let name = data["name"],
                       error == nil
@@ -78,6 +79,31 @@ final class DatabaseManager {
             .setData(data) { error in
                 completion(error == nil)
             }
+    }
+    
+    public func updateUserProfilePhoto(
+        email: String,
+        completion: @escaping (Bool) -> Void
+    ) {
+        let path = email
+            .replacingOccurrences(of: ".", with: "_")
+            .replacingOccurrences(of: "@", with: "_")
+        
+        let ref = "profile_pictures/\(path)/photo.png"
+        
+        let dbRef = database
+            .collection("users")
+            .document(path)
+        
+        dbRef.getDocument { snapshot, error in
+            guard var data = snapshot?.data() as? [String: String], error == nil
+            else { return }
+            data["profile_photo"] = ref
+            
+            dbRef.setData(data) { error in
+                completion(error == nil)
+            }
+        }
     }
     
 }

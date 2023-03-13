@@ -21,6 +21,11 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     
     @objc
     private func profilePhotoTapped() {
+        
+        guard let myEmail = UserDefaults.standard.string(forKey: "email"),
+              myEmail == currentEmail
+        else { return }
+        
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary
         picker.delegate = self
@@ -33,10 +38,22 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true, completion: nil)
+        
         guard let image = info[.editedImage] as? UIImage else { return }
         
-        StorageManager.shared.uploadUserProfilePicture(email: currentEmail, image: image) { success in
-            
+        StorageManager.shared.uploadUserProfilePhoto(email: currentEmail, image: image) {
+            [weak self] success in
+            guard let strong = self else { return }
+            if success {
+                // database update
+                DatabaseManager.shared.updateUserProfilePhoto(email: strong.currentEmail) { success in
+                    guard success else { return }
+                    DispatchQueue.main.async {
+                        strong.fetchProfileData()
+                    }
+                }
+            }
         }
     }
     
@@ -129,7 +146,7 @@ final class ProfileViewController: UIViewController {
         }
         if let ref = profilePhotoRef {
             // fetch image
-            //fetchProfileData()
+            print("found photo ref: \(ref)")
         }
     }
     
