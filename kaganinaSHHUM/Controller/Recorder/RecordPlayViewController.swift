@@ -86,8 +86,8 @@ final class RecordPlayViewController: UIViewController {
         buttonsSV.distribution = .fillEqually
 
         self.view.addSubview(buttonsSV)
-        buttonsSV.pinLeft(to: self.view, self.view.frame.width / 10)
-        buttonsSV.pinRight(to: self.view, self.view.frame.width / 10)
+        buttonsSV.pinLeft(to: self.view, self.view.frame.size.width / 10)
+        buttonsSV.pinRight(to: self.view, self.view.frame.size.width / 10)
         buttonsSV.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
         //buttonsSV.pinHeight(to: self.view.safeAreaLayoutGuide.heightAnchor)
     }

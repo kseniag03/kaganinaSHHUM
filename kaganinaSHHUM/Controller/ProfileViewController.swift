@@ -7,13 +7,52 @@ import UIKit
 
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return posts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "post title will be there..."
+        let post = posts[indexPath.row]
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PostPreviewTableViewCell.identifier, for: indexPath) as? PostPreviewTableViewCell else {
+            fatalError()
+        }
+        cell.configure(with: .init(title: post.title, imageUrl: post.headerImageURL))
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
+        HapticsManager.shared.vibrateForSelection()
+
+        var isOwnedByCurrentUser = false
+        if let email = UserDefaults.standard.string(forKey: "email") {
+            isOwnedByCurrentUser = email == currentEmail
+        }
+
+        if !isOwnedByCurrentUser {
+            let vc = PostViewController(
+                post: posts[indexPath.row],
+                isOwnedByCurrentUser: isOwnedByCurrentUser
+            )
+            vc.navigationItem.largeTitleDisplayMode = .never
+            vc.title = "Post"
+            navigationController?.pushViewController(vc, animated: true)
+        }
+        else {
+            // Our post
+            let vc = PostViewController(
+                post: posts[indexPath.row],
+                isOwnedByCurrentUser: isOwnedByCurrentUser
+            )
+            vc.navigationItem.largeTitleDisplayMode = .never
+            vc.title = "Post"
+            navigationController?.pushViewController(vc, animated: true)
+
+        }
     }
 }
 
@@ -67,6 +106,12 @@ final class ProfileViewController: UIViewController {
     
     private var user: User?
     
+    private var posts: [Post] = []
+    
+    private func fetchPosts() {
+        
+    }
+    
     init(currentEmail: String) {
         self.currentEmail = currentEmail
         super.init(nibName: nil, bundle: nil)
@@ -85,9 +130,15 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        setupNavBar()
         setupTableView()
         setupTableViewHeader()
-        setupNavBar()
+        fetchProfileData()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        tableView.frame = view.bounds
     }
 
     private func setupView() {
@@ -101,8 +152,8 @@ final class ProfileViewController: UIViewController {
                 CGRect(
                     x: 0,
                     y: 0,
-                    width: view.frame.width / 2,
-                    height: view.frame.width / 2
+                    width: view.frame.size.width / 2,
+                    height: view.frame.size.width / 1.5
                 )
         )
         headerView.backgroundColor = .systemPink
@@ -114,13 +165,18 @@ final class ProfileViewController: UIViewController {
         let profilePhoto = UIImageView(image: UIImage(systemName: "person"))
         profilePhoto.tintColor = .white
         profilePhoto.contentMode = .scaleAspectFit
+        
         profilePhoto.frame = CGRect(
-            x: (view.frame.width - (view.frame.width / 4)) / 2,
-            y: (headerView.frame.height - (view.frame.width / 4)) / 2,
-            width: view.frame.width / 4,
-            height: view.frame.width / 4
+            x: (view.frame.size.width - (view.frame.size.width / 4)) / 2,
+            y: (headerView.frame.size.height - (view.frame.size.width / 4)) / 2.5,
+            width: view.frame.size.width / 4,
+            height: view.frame.size.width / 4
         )
+        
+        profilePhoto.layer.masksToBounds = true
+        profilePhoto.layer.cornerRadius = profilePhoto.frame.width / 2
         profilePhoto.isUserInteractionEnabled = true
+        
         headerView.addSubview(profilePhoto)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(profilePhotoTapped))
@@ -130,16 +186,17 @@ final class ProfileViewController: UIViewController {
             frame:
                 CGRect(
                     x: 20,
-                    y: profilePhoto.frame.maxY + 10,
-                    width: view.frame.width - 40,
+                    y: profilePhoto.frame.origin.y + profilePhoto.frame.size.height + 20,
+                    width: view.frame.size.width - 40,
                     height: 100
                 )
         )
-        headerView.addSubview(emailLabel)
+        
         emailLabel.text = currentEmail
         emailLabel.textAlignment = .center
         emailLabel.textColor = .white
         emailLabel.font = .systemFont(ofSize: 25, weight: .bold)
+        headerView.addSubview(emailLabel)
         
         if let name = name {
             title = name
@@ -147,6 +204,17 @@ final class ProfileViewController: UIViewController {
         if let ref = profilePhotoRef {
             // fetch image
             print("found photo ref: \(ref)")
+            StorageManager.shared.dowloadURLForProfilePhoto(path: ref) { url in
+                guard let url = url else { return }
+                let task = URLSession.shared.dataTask(with: url) { data, _, _ in
+                    guard let data = data else { return }
+                    
+                    DispatchQueue.main.async {
+                        profilePhoto.image = UIImage(data: data)
+                    }
+                }
+                task.resume()
+            }
         }
     }
     
@@ -168,13 +236,13 @@ final class ProfileViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
                 
-        self.view.addSubview(tableView)
+        self.view.addSubview(tableView)/*
         tableView.pinTop(to: self.view.topAnchor)
         tableView.pinLeft(to: self.view, self.view.frame.width / 10)
         tableView.pinRight(to: self.view, self.view.frame.width / 10)
         tableView.pinHeight(to: self.view.safeAreaLayoutGuide.heightAnchor)
         
-        tableView.reloadData()
+        tableView.reloadData()*/
     }
     
     private func setupNavBar() {
@@ -182,13 +250,13 @@ final class ProfileViewController: UIViewController {
             title: "Sign Out",
             style: .done,
             target: self,
-            action: #selector(didTapSignOut)
+            action: #selector(signOutPressed)
         )
     }
     
     /// Sign Out
     @objc
-    private func didTapSignOut() {
+    private func signOutPressed() {
         let sheet = UIAlertController(title: "Sign Out", message: "Do you want to sign out ?", preferredStyle: .actionSheet)
         sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         sheet.addAction(UIAlertAction(title: "Sign Out", style: .destructive, handler: { _ in

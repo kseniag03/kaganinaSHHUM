@@ -91,26 +91,26 @@ final class SignUpViewController: UITabBarController {
         
         self.view.addSubview(headerView)
         headerView.pinTop(to: self.view.safeAreaLayoutGuide.topAnchor)
-        headerView.pinLeft(to: self.view, self.view.frame.width / 10)
-        headerView.pinRight(to: self.view, self.view.frame.width / 10)
+        headerView.pinLeft(to: self.view, self.view.frame.size.width / 10)
+        headerView.pinRight(to: self.view, self.view.frame.size.width / 10)
         
-        nameField.pinTop(to: headerView, self.view.frame.height / 10)
-        nameField.pinLeft(to: self.view, self.view.frame.width / 10)
-        nameField.pinRight(to: self.view, self.view.frame.width / 10)
+        nameField.pinTop(to: headerView, self.view.frame.size.height / 10)
+        nameField.pinLeft(to: self.view, self.view.frame.size.width / 10)
+        nameField.pinRight(to: self.view, self.view.frame.size.width / 10)
         
-        emailField.pinTop(to: nameField, self.view.frame.height / 10)
-        emailField.pinLeft(to: self.view, self.view.frame.width / 10)
-        emailField.pinRight(to: self.view, self.view.frame.width / 10)
+        emailField.pinTop(to: nameField, self.view.frame.size.height / 10)
+        emailField.pinLeft(to: self.view, self.view.frame.size.width / 10)
+        emailField.pinRight(to: self.view, self.view.frame.size.width / 10)
        // emailField.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
         
-        passwordField.pinTop(to: emailField, self.view.frame.height / 10)
-        passwordField.pinLeft(to: self.view, self.view.frame.width / 10)
-        passwordField.pinRight(to: self.view, self.view.frame.width / 10)
+        passwordField.pinTop(to: emailField, self.view.frame.size.height / 10)
+        passwordField.pinLeft(to: self.view, self.view.frame.size.width / 10)
+        passwordField.pinRight(to: self.view, self.view.frame.size.width / 10)
        // passwordField.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
         
-        signUpButton.pinTop(to: passwordField, self.view.frame.height / 10)
-        signUpButton.pinLeft(to: self.view, self.view.frame.width / 10)
-        signUpButton.pinRight(to: self.view, self.view.frame.width / 10)
+        signUpButton.pinTop(to: passwordField, self.view.frame.size.height / 10)
+        signUpButton.pinLeft(to: self.view, self.view.frame.size.width / 10)
+        signUpButton.pinRight(to: self.view, self.view.frame.size.width / 10)
      //   signInButton.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
         
     }

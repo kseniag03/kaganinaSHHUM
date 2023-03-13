@@ -1,13 +1,77 @@
 //
-//  InfoViewController.swift
+//  MainViewController.swift
 //  kaganinaSHHUM
 //
 
-//
-//  NewsViewController.swift
-//  kaganinaPW5
-//
+import Foundation
+import UIKit
 
+final class MainViewController: UIViewController {
+    
+    private let composeButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .systemBlue
+        button.tintColor = .white
+        
+        button.setImage(UIImage(
+            systemName: "square.and.pencil.circle.fill",
+            withConfiguration: UIImage.SymbolConfiguration(
+                pointSize: 32,
+                weight: .medium
+            )
+        ), for: .normal)
+        
+        button.layer.cornerRadius = 40
+        button.layer.shadowColor = UIColor.label.cgColor
+        button.layer.shadowOpacity = 0.25
+        button.layer.shadowRadius = 10
+        return button
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        print("!!!!!!!!!!   home did load   !!!!!!!!!")
+        
+        setupView()
+        setupNavBar()
+    }
+    
+    private func setupView() {
+        self.view.backgroundColor = .systemBackground
+        
+        view.addSubview(composeButton)
+        
+        composeButton.addTarget(self, action: #selector(composeButtonPressed), for: .touchUpInside)
+        
+        composeButton.frame = CGRect(
+            x: view.frame.size.width - 80 - 16,
+            y: view.frame.size.height - 160 - 16 - view.safeAreaInsets.bottom,
+            width: 50,
+            height: 50)
+
+    }
+    
+    private func setupNavBar() {
+        navigationItem.title = "Home"
+    }
+    
+    @objc
+    private func composeButtonPressed() {
+        let vc = CreateNewPostViewController()
+        vc.title = "Публикация"
+        let navVc = UINavigationController(rootViewController: vc)
+        present(navVc, animated: true)
+        
+    }
+}
+
+
+
+
+
+
+/*
 import Foundation
 import UIKit
 
@@ -455,3 +519,4 @@ class ApiService {
         }.resume()
     }
 }
+*/

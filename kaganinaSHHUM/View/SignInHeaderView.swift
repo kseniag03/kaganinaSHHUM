@@ -40,13 +40,13 @@ class SignInHeaderView: UIView {
        // imageView.frame = CGRect(x: imageView.frame.width, y: <#T##CGFloat#>, width: <#T##CGFloat#>, height: <#T##CGFloat#>)
         
         imageView.pinTop(to: self.safeAreaLayoutGuide.topAnchor)
-        imageView.pinLeft(to: self, self.frame.width / 10)
-        imageView.pinRight(to: self, self.frame.width / 10)
-        imageView.pinHeight(to: self, self.frame.height / 3)
+        imageView.pinLeft(to: self, self.frame.size.width / 10)
+        imageView.pinRight(to: self, self.frame.size.width / 10)
+        imageView.pinHeight(to: self, self.frame.size.height / 3)
         
         label.pinTop(to: self.safeAreaLayoutGuide.topAnchor)
-        label.pinLeft(to: self, self.frame.width / 10)
-        label.pinRight(to: self, self.frame.width / 10)
+        label.pinLeft(to: self, self.frame.size.width / 10)
+        label.pinRight(to: self, self.frame.size.width / 10)
         label.pinHeight(to: imageView, 10)
         /*
         imageView.pinCenter(to: self)

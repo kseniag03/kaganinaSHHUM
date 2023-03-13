@@ -21,6 +21,33 @@ final class DatabaseManager {
         
     }
     
+    public func insert(
+        post: Post,
+        email: String,
+        completion: @escaping (Bool) -> Void
+    ) {
+        let userEmail = email
+            .replacingOccurrences(of: ".", with: "_")
+            .replacingOccurrences(of: "@", with: "_")
+
+        let data: [String: Any] = [
+            "id": post.id,
+            "title": post.title,
+            "body": post.text,
+            "created": post.timestamp,
+            "headerImageUrl": post.headerImageURL?.absoluteString ?? ""
+        ]
+
+        database
+            .collection("users")
+            .document(userEmail)
+            .collection("posts")
+            .document(post.id)
+            .setData(data) { error in
+                completion(error == nil)
+            }
+    }
+    
     public func getUser(
         for email: String,
         completion: @escaping (User?) -> Void

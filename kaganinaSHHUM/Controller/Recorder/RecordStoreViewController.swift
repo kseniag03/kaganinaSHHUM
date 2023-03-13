@@ -143,8 +143,8 @@ final class RecordStoreViewController: UIViewController {
                 
         self.view.addSubview(recordsTableView)
         recordsTableView.pinTop(to: self.view.topAnchor)
-        recordsTableView.pinLeft(to: self.view, self.view.frame.width / 10)
-        recordsTableView.pinRight(to: self.view, self.view.frame.width / 10)
+        recordsTableView.pinLeft(to: self.view, self.view.frame.size.width / 10)
+        recordsTableView.pinRight(to: self.view, self.view.frame.size.width / 10)
         recordsTableView.pinHeight(to: self.view.safeAreaLayoutGuide.heightAnchor)
         
         recordsTableView.reloadData()

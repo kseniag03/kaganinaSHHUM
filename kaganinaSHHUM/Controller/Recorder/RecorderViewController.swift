@@ -124,8 +124,8 @@ final class RecorderViewController: UIViewController {
 
         self.view.addSubview(buttonsSV)
         buttonsSV.pinTop(to: self.view.safeAreaLayoutGuide.topAnchor)
-        buttonsSV.pinLeft(to: self.view, self.view.frame.width / 10)
-        buttonsSV.pinRight(to: self.view, self.view.frame.width / 10)
+        buttonsSV.pinLeft(to: self.view, self.view.frame.size.width / 10)
+        buttonsSV.pinRight(to: self.view, self.view.frame.size.width / 10)
         buttonsSV.pinHeight(to: self.view.safeAreaLayoutGuide.heightAnchor)
     }
     
