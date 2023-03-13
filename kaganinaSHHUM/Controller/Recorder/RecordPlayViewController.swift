@@ -39,7 +39,7 @@ final class RecordPlayViewController: UIViewController {
         setupView()
         setupNavBar()
     }
-    
+ /*
     private func makeMenuButton(title: String) -> UIButton {
         let button = UIButton()
         button.setTitle(title, for: .normal)
@@ -51,7 +51,7 @@ final class RecordPlayViewController: UIViewController {
         button.heightAnchor.constraint(equalTo: button.widthAnchor).isActive = true
         return button
     }
-    
+   */
     private func changeButtonState(button: UIButton) {
         if !button.isEnabled {
             button.setImage(UIImage(named: "play.fill"), for: .normal)
@@ -62,7 +62,7 @@ final class RecordPlayViewController: UIViewController {
     
     private func setupView() {
 
-        recordPlayButton = makeMenuButton(title: "")
+        recordPlayButton.makeMenuButton(to: recordPlayButton, title: "PLAY")
         recordPlayButton.setImage(UIImage(named: "play.fill"), for: .normal)
         recordPlayButton.addTarget(
             self,
@@ -70,7 +70,7 @@ final class RecordPlayViewController: UIViewController {
             for: .touchUpInside
         )
         
-        recordStopPlayButton = makeMenuButton(title: "")
+        recordStopPlayButton.makeMenuButton(to: recordStopPlayButton, title: "STOP PLAY")
         recordStopPlayButton.setImage(UIImage(named: "stop.fill"), for: .normal)
         recordStopPlayButton.addTarget(
             self,

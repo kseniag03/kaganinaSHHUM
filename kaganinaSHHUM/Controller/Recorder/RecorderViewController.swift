@@ -72,7 +72,7 @@ final class RecorderViewController: UIViewController {
             print("unknown")
         }
     }
-    
+    /*
     private func makeMenuButton(title: String) -> UIButton {
         let button = UIButton()
         button.setTitle(title, for: .normal)
@@ -83,7 +83,7 @@ final class RecorderViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.heightAnchor.constraint(equalTo: button.widthAnchor).isActive = true
         return button
-    }
+    }*/
     
     private func changeButtonState(button: UIButton) {
         if !button.isEnabled {
@@ -98,14 +98,14 @@ final class RecorderViewController: UIViewController {
     private func setupView() {
         self.view.backgroundColor = .blue
 
-        recordStartButton = makeMenuButton(title: "START")
+        recordStartButton.makeMenuButton(to: recordStartButton, title: "START")
         recordStartButton.addTarget(
             self,
             action: #selector(startRecording),
             for: .touchUpInside
         )
         
-        recordStopButton = makeMenuButton(title: "STOP")
+        recordStopButton.makeMenuButton(to: recordStopButton, title: "STOP")
         recordStopButton.addTarget(
             self,
             action: #selector(stopRecording),

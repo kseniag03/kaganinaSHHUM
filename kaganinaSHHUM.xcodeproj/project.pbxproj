@@ -29,6 +29,8 @@
 		1C82C40629BE508B004F7D50 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C40529BE508B004F7D50 /* User.swift */; };
 		1C82C40829BE509D004F7D50 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C40729BE509D004F7D50 /* Post.swift */; };
 		1C82C40A29BE55AE004F7D50 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C40929BE55AE004F7D50 /* TabBarViewController.swift */; };
+		1C82C40D29BF0C8E004F7D50 /* SignInHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C40C29BF0C8E004F7D50 /* SignInHeaderView.swift */; };
+		1C82C40F29BF190D004F7D50 /* StyleLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C40E29BF190D004F7D50 /* StyleLibrary.swift */; };
 		1CF14543296C5F1C00DDE53B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF14542296C5F1C00DDE53B /* ProfileViewController.swift */; };
 		1CF14545296C5FAE00DDE53B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF14544296C5FAE00DDE53B /* SearchViewController.swift */; };
 		1CF14547296C5FE900DDE53B /* RecorderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF14546296C5FE900DDE53B /* RecorderViewController.swift */; };
@@ -58,6 +60,8 @@
 		1C82C40529BE508B004F7D50 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		1C82C40729BE509D004F7D50 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		1C82C40929BE55AE004F7D50 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
+		1C82C40C29BF0C8E004F7D50 /* SignInHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInHeaderView.swift; sourceTree = "<group>"; };
+		1C82C40E29BF190D004F7D50 /* StyleLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleLibrary.swift; sourceTree = "<group>"; };
 		1CF14542296C5F1C00DDE53B /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		1CF14544296C5FAE00DDE53B /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		1CF14546296C5FE900DDE53B /* RecorderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecorderViewController.swift; sourceTree = "<group>"; };
@@ -99,6 +103,7 @@
 		1C3D91AC296B173A009403ED /* kaganinaSHHUM */ = {
 			isa = PBXGroup;
 			children = (
+				1C82C40B29BF0C64004F7D50 /* View */,
 				1C82C3F229BE1C57004F7D50 /* Manager */,
 				1C3D91C5296B1DCF009403ED /* Model */,
 				1C3D91C4296B1D9F009403ED /* Controller */,
@@ -117,6 +122,7 @@
 			isa = PBXGroup;
 			children = (
 				1C3D91C1296B1AF6009403ED /* PinLibrary.swift */,
+				1C82C40E29BF190D004F7D50 /* StyleLibrary.swift */,
 			);
 			path = Library;
 			sourceTree = "<group>";
@@ -182,6 +188,14 @@
 				1C82C3F929BE1CFD004F7D50 /* CreateNewPostViewController.swift */,
 			);
 			path = Post;
+			sourceTree = "<group>";
+		};
+		1C82C40B29BF0C64004F7D50 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1C82C40C29BF0C8E004F7D50 /* SignInHeaderView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		2B395793779E6B14BF14FFC4 /* Frameworks */ = {
@@ -325,10 +339,12 @@
 				1C766EE029BA09A500BF9CF5 /* ViewController.swift in Sources */,
 				1C82C3F629BE1CC4004F7D50 /* SignInViewController.swift in Sources */,
 				1C1FECD229BB2E1100D18911 /* InfoViewController.swift in Sources */,
+				1C82C40D29BF0C8E004F7D50 /* SignInHeaderView.swift in Sources */,
 				1C82C3FE29BE1D7E004F7D50 /* AuthManager.swift in Sources */,
 				1C3D91AE296B173A009403ED /* AppDelegate.swift in Sources */,
 				1C82C3FC29BE1D23004F7D50 /* PostViewController.swift in Sources */,
 				1C82C3F829BE1CD8004F7D50 /* SignUpViewController.swift in Sources */,
+				1C82C40F29BF190D004F7D50 /* StyleLibrary.swift in Sources */,
 				1CF14547296C5FE900DDE53B /* RecorderViewController.swift in Sources */,
 				1C82C3F429BE1C7C004F7D50 /* DatabaseManager.swift in Sources */,
 				1C3D91C7296B2361009403ED /* Tag.swift in Sources */,

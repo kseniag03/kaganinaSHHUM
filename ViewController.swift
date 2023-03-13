@@ -21,7 +21,7 @@ class ViewController: UIViewController {
     }
     
     private func setupView() {
-        self.view.backgroundColor = .systemGray6
+        self.view.backgroundColor = .systemGray6/*
         let button = makeMenuButton(title: "TABS")
         button.addTarget(
             self,
@@ -31,7 +31,7 @@ class ViewController: UIViewController {
         self.view.addSubview(button)
         button.pinLeft(to: self.view, self.view.frame.size.width / 10)
         button.pinRight(to: self.view, self.view.frame.size.width / 10)
-        button.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
+        button.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)*/
         //setupMenuButtons()
     }
     
@@ -67,7 +67,7 @@ class ViewController: UIViewController {
         tabBarVC.modalPresentationStyle = .fullScreen
         present(tabBarVC, animated: true)
     }
-    
+    /*
     private func makeMenuButton(title: String) -> UIButton {
         let button = UIButton()
         button.setTitle(title, for: .normal)
@@ -78,7 +78,7 @@ class ViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.heightAnchor.constraint(equalTo: button.widthAnchor).isActive = true
         return button
-    }
+    }*/
 /*
     private func setupMenuButtons() {
         let mainScreenButton = makeMenuButton(title: "MAIN")

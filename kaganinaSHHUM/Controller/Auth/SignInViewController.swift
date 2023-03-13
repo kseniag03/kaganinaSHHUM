@@ -8,9 +8,103 @@ import UIKit
 
 final class SignInViewController: UITabBarController {
     
+    private let headerView = SignInHeaderView()
+    
+    private let emailField: UITextField = {
+        let field = UITextField()
+        field.keyboardType = .emailAddress
+        field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
+        field.placeholder = "Email Address"
+        field.backgroundColor = .secondarySystemBackground
+        field.layer.cornerRadius = 8
+        field.layer.masksToBounds = true
+        return field
+    }()
+    
+    private let passwordField: UITextField = {
+        let field = UITextField()
+        field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
+        field.placeholder = "Password"
+        field.isSecureTextEntry = true
+        field.backgroundColor = .secondarySystemBackground
+        field.layer.cornerRadius = 8
+        field.layer.masksToBounds = true
+        return field
+    }()
+    
+    private let signInButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .link
+        button.setTitle("Sign In", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 12
+        return button
+    }()
+    
+    private let createAccountButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Create Account", for: .normal)
+        button.setTitleColor(.link, for: .normal)
+        button.layer.cornerRadius = 12
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+    }
+    
+    private func setupView() {
         title = "Sign In"
         view.backgroundColor = .systemBackground
+        
+        view.addSubview(headerView)
+        view.addSubview(emailField)
+        view.addSubview(passwordField)
+        view.addSubview(signInButton)
+        view.addSubview(createAccountButton)
+        
+        signInButton.addTarget(self, action: #selector(signInButtonPressed), for: .touchUpInside)
+        createAccountButton.addTarget(self, action: #selector(createAccountButtonPressed), for: .touchUpInside)
+        
+        self.view.addSubview(headerView)
+        headerView.pinTop(to: self.view.safeAreaLayoutGuide.topAnchor)
+        headerView.pinLeft(to: self.view, self.view.frame.width / 10)
+        headerView.pinRight(to: self.view, self.view.frame.width / 10)
+        
+        emailField.pinTop(to: headerView, self.view.frame.height / 10)
+        emailField.pinLeft(to: self.view, self.view.frame.width / 10)
+        emailField.pinRight(to: self.view, self.view.frame.width / 10)
+       // emailField.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
+        
+        passwordField.pinTop(to: emailField, self.view.frame.height / 10)
+        passwordField.pinLeft(to: self.view, self.view.frame.width / 10)
+        passwordField.pinRight(to: self.view, self.view.frame.width / 10)
+       // passwordField.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
+        
+        signInButton.pinTop(to: passwordField, self.view.frame.height / 10)
+        signInButton.pinLeft(to: self.view, self.view.frame.width / 10)
+        signInButton.pinRight(to: self.view, self.view.frame.width / 10)
+     //   signInButton.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
+        
+        createAccountButton.pinTop(to: signInButton, self.view.frame.height / 10)
+        createAccountButton.pinLeft(to: self.view, self.view.frame.width / 10)
+        createAccountButton.pinRight(to: self.view, self.view.frame.width / 10)
+      //  createAccountButton.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
+        
+    }
+    
+    @objc
+    private func signInButtonPressed() {
+        
+    }
+    
+    @objc
+    private func createAccountButtonPressed() {
+        
     }
 }

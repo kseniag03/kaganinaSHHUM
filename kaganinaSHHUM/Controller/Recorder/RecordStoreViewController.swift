@@ -222,7 +222,7 @@ extension RecordStoreViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let playController = RecordPlayViewController()
         let record = dataSource[indexPath.row]
-        playController.setFileName(record: &record)
+        playController.setFileName(record: record)
         navigationController?.pushViewController(playController, animated: true)
     }
 }

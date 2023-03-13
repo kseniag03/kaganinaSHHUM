@@ -6,6 +6,7 @@
 import UIKit
 
 extension UIView {
+    
     @discardableResult
     func pinTop(to superview: UIView, _ const: CGFloat = 0) -> NSLayoutConstraint {
         translatesAutoresizingMaskIntoConstraints = false
@@ -95,10 +96,32 @@ extension UIView {
     }
     
     @discardableResult
+    func pinWidth(to superview: UIView, _ const: CGFloat = 0) -> NSLayoutConstraint {
+        translatesAutoresizingMaskIntoConstraints = false
+        let constraint = widthAnchor.constraint(
+            equalTo: superview.widthAnchor,
+            constant: CGFloat(const)
+        )
+        constraint.isActive = true
+        return constraint
+    }
+    
+    @discardableResult
     func pinWidth(to side: NSLayoutDimension, _ const: CGFloat = 0) -> NSLayoutConstraint {
         translatesAutoresizingMaskIntoConstraints = false
         let constraint = widthAnchor.constraint(
             equalTo: side,
+            constant: CGFloat(const)
+        )
+        constraint.isActive = true
+        return constraint
+    }
+    
+    @discardableResult
+    func pinHeight(to superview: UIView, _ const: CGFloat = 0) -> NSLayoutConstraint {
+        translatesAutoresizingMaskIntoConstraints = false
+        let constraint = heightAnchor.constraint(
+            equalTo: superview.heightAnchor,
             constant: CGFloat(const)
         )
         constraint.isActive = true
@@ -115,4 +138,34 @@ extension UIView {
         constraint.isActive = true
         return constraint
     }
+    
+    @discardableResult
+    func pinCenterX(to superview: UIView, _ const: CGFloat = 0) -> NSLayoutConstraint {
+        translatesAutoresizingMaskIntoConstraints = false
+        let constraint = centerXAnchor.constraint(
+            equalTo: superview.centerXAnchor,
+            constant: CGFloat(const)
+        )
+        constraint.isActive = true
+        return constraint
+    }
+    
+    @discardableResult
+    func pinCenterY(to superview: UIView, _ const: CGFloat = 0) -> NSLayoutConstraint {
+        translatesAutoresizingMaskIntoConstraints = false
+        let constraint = centerYAnchor.constraint(
+            equalTo: superview.centerYAnchor,
+            constant: CGFloat(const)
+        )
+        constraint.isActive = true
+        return constraint
+    }
+    
+    func pinCenter(to superview: UIView) {
+        pinCenterX(to: superview)
+        pinCenterY(to: superview)
+    }
+
+    
+    
 }
