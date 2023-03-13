@@ -12,8 +12,11 @@ final class SignInViewController: UITabBarController {
     
     private let emailField: UITextField = {
         let field = UITextField()
+        field.autocapitalizationType = .none
+        field.autocorrectionType = .no
         field.keyboardType = .emailAddress
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
+        field.leftViewMode = .always
         field.placeholder = "Email Address"
         field.backgroundColor = .secondarySystemBackground
         field.layer.cornerRadius = 8
@@ -23,7 +26,10 @@ final class SignInViewController: UITabBarController {
     
     private let passwordField: UITextField = {
         let field = UITextField()
+        field.autocapitalizationType = .none
+        field.autocorrectionType = .no
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 50))
+        field.leftViewMode = .always
         field.placeholder = "Password"
         field.isSecureTextEntry = true
         field.backgroundColor = .secondarySystemBackground
@@ -100,11 +106,26 @@ final class SignInViewController: UITabBarController {
     
     @objc
     private func signInButtonPressed() {
+        guard let email = emailField.text, !email.isEmpty,
+              let password = passwordField.text, !password.isEmpty
+        else { return }
         
+        AuthManager.shared.signIn(email: email, password: password, completion: { [weak self] success in
+            guard success else { return }
+            UserDefaults.standard.set(email, forKey: "email")
+            DispatchQueue.main.async {
+                let vc = TabBarViewController()
+                vc.modalPresentationStyle = .fullScreen
+                self?.present(vc, animated: true)
+            }
+        })
     }
     
     @objc
     private func createAccountButtonPressed() {
-        
+        let signUpController = SignUpViewController()
+        signUpController.title = "Create Account"
+        signUpController.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(signUpController, animated: true)
     }
 }
