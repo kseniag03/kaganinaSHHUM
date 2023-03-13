@@ -135,13 +135,13 @@ final class RecordStoreViewController: UIViewController {
         recordsTableView.register(RecordCell.self, forCellReuseIdentifier: RecordCell.reuseIdentifier)
         recordsTableView.register(AddRecordCell.self, forCellReuseIdentifier: AddRecordCell.reuseIdentifier)
         
-        self.view.addSubview(recordsTableView)
+     //   self.view.addSubview(recordsTableView)
         recordsTableView.backgroundColor = .clear
         recordsTableView.keyboardDismissMode = .onDrag
         recordsTableView.dataSource = self
         recordsTableView.delegate = self
                 
-        self.view.addSubview(self.recordsTableView)
+        self.view.addSubview(recordsTableView)
         recordsTableView.pinTop(to: self.view.topAnchor)
         recordsTableView.pinLeft(to: self.view, self.view.frame.width / 10)
         recordsTableView.pinRight(to: self.view, self.view.frame.width / 10)
