@@ -64,9 +64,7 @@ final class StorageManager {
             .replacingOccurrences(of: "@", with: "_")
             .replacingOccurrences(of: ".", with: "_")
 
-        guard let pngData = image.pngData() else {
-            return
-        }
+        guard let pngData = image.pngData() else { return }
 
         container
             .reference(withPath: "post_headers/\(path)/\(postId).png")

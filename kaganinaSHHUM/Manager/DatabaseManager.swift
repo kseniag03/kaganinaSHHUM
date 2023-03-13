@@ -33,9 +33,9 @@ final class DatabaseManager {
         let data: [String: Any] = [
             "id": post.id,
             "title": post.title,
-            "body": post.text,
+            "discription": post.text,
             "created": post.timestamp,
-            "headerImageUrl": post.headerImageURL?.absoluteString ?? ""
+            "headerImageURL": post.headerImageURL?.absoluteString ?? ""
         ]
 
         database
@@ -80,11 +80,47 @@ final class DatabaseManager {
         
     }
     
-    public func getPostsForUser(
-        for user: User,
+    public func getPosts(
+        for email: String,
         completion: @escaping ([Post]) -> Void
     ) {
-        
+        let userEmail = email
+            .replacingOccurrences(of: ".", with: "_")
+            .replacingOccurrences(of: "@", with: "_")
+        database
+            .collection("users")
+            .document(userEmail)
+            .collection("posts")
+            .getDocuments { snapshot, error in
+                guard let documents = snapshot?.documents.compactMap({ $0.data() }),
+                      error == nil
+                else {
+                    return
+                }
+
+                let posts: [Post] = documents.compactMap({ dictionary in
+                    guard let id = dictionary["id"] as? String,
+                          let title = dictionary["title"] as? String,
+                          let discription = dictionary["discription"] as? String,
+                          let created = dictionary["created"] as? TimeInterval,
+                          let imageURLString = dictionary["headerImageURL"] as? String
+                    else {
+                        print("Invalid post fetch conversion")
+                        return nil
+                    }
+
+                    let post = Post(
+                        id: id,
+                        title: title,
+                        timestamp: created,
+                        headerImageURL: URL(string: imageURLString),
+                        text: discription
+                    )
+                    return post
+                })
+
+                completion(posts)
+            }
     }
     
     public func insert(

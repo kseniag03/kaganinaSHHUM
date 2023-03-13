@@ -139,15 +139,15 @@ final class CreateNewPostViewController: UIViewController {
     private func postTapped() {
         // Check data and post
         guard let title = titleField.text,
-              let body = textView.text,
+              let discription = textView.text,
               let headerImage = selectedHeaderImage,
               let email = UserDefaults.standard.string(forKey: "email"),
               !title.trimmingCharacters(in: .whitespaces).isEmpty,
-              !body.trimmingCharacters(in: .whitespaces).isEmpty
+              !discription.trimmingCharacters(in: .whitespaces).isEmpty
         else {
 
             let alert = UIAlertController(title: "Enter Post Details",
-                                          message: "Please enter a title, body, and select a image to continue.",
+                                          message: "Please enter a title, discription, and select a image to continue.",
                                           preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
             present(alert, animated: true)
@@ -182,11 +182,12 @@ final class CreateNewPostViewController: UIViewController {
                     title: title,
                     timestamp: Date().timeIntervalSince1970,
                     headerImageURL: headerUrl,
-                    text: body
+                    text: discription
                 )
 
                 DatabaseManager.shared.insert(post: post, email: email) { [weak self] posted in
-                    guard posted else {
+                    guard posted
+                    else {
                         DispatchQueue.main.async {
                             HapticsManager.shared.vibrate(for: .error)
                         }

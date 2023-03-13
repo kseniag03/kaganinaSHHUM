@@ -15,7 +15,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PostPreviewTableViewCell.identifier, for: indexPath) as? PostPreviewTableViewCell else {
             fatalError()
         }
-        cell.configure(with: .init(title: post.title, imageUrl: post.headerImageURL))
+        cell.configure(with: .init(title: post.title, imageURL: post.headerImageURL))
         return cell
     }
 
@@ -109,7 +109,14 @@ final class ProfileViewController: UIViewController {
     private var posts: [Post] = []
     
     private func fetchPosts() {
-        
+        print("Fetching posts...")
+        DatabaseManager.shared.getPosts(for: currentEmail) { [weak self] posts in
+            self?.posts = posts
+            print("Found \(posts.count) posts")
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
     }
     
     init(currentEmail: String) {
@@ -123,7 +130,7 @@ final class ProfileViewController: UIViewController {
     
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(PostPreviewTableViewCell.self, forCellReuseIdentifier: PostPreviewTableViewCell.identifier)
         return tableView
     }()
     
@@ -134,6 +141,7 @@ final class ProfileViewController: UIViewController {
         setupTableView()
         setupTableViewHeader()
         fetchProfileData()
+        fetchPosts()
     }
     
     override func viewDidLayoutSubviews() {
