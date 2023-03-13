@@ -61,8 +61,8 @@ final class StorageManager {
         completion: @escaping (Bool) -> Void
     ) {
         let path = email
-            .replacingOccurrences(of: "@", with: "_")
             .replacingOccurrences(of: ".", with: "_")
+            .replacingOccurrences(of: "@", with: "_")
 
         guard let pngData = image.pngData() else { return }
 
@@ -92,8 +92,13 @@ final class StorageManager {
         completion: @escaping (URL?) -> Void
     ) {
         let path = email
-            .replacingOccurrences(of: "@", with: "_")
             .replacingOccurrences(of: ".", with: "_")
+            .replacingOccurrences(of: "@", with: "_")
+        
+        
+        let picPath = "post_headers/\(path)/\(postId).png"
+        
+        print("!!! picPath = \(picPath)")
 
         container
             .reference(withPath: "post_headers/\(path)/\(postId).png")

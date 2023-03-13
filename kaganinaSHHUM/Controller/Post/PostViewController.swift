@@ -62,7 +62,7 @@ extension PostViewController: UITableViewDataSource, UITableViewDelegate {
         let index = indexPath.row
         
         switch index {
-        case 0:
+        case 0: // title
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
             cell.selectionStyle = .none
@@ -71,7 +71,7 @@ extension PostViewController: UITableViewDataSource, UITableViewDelegate {
             cell.textLabel?.text = post.title
             return cell
             
-        case 1:
+        case 1: // image
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: PostHeaderTableViewCell.identifier,
                 for: indexPath)
@@ -80,15 +80,17 @@ extension PostViewController: UITableViewDataSource, UITableViewDelegate {
                 fatalError()
             }
             cell.selectionStyle = .none
-            cell.configure(with: .init(imageUrl: post.headerImageURL))
+            cell.configure(with: .init(imageURL: post.headerImageURL))
             return cell
             
-        case 2:
+        case 2: // text
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
             cell.selectionStyle = .none
             cell.textLabel?.numberOfLines = 0
             cell.textLabel?.text = post.text
             return cell
+            
+            // case 3 for audio
             
         default:
             fatalError()
@@ -101,7 +103,7 @@ extension PostViewController: UITableViewDataSource, UITableViewDelegate {
         case 0:
             return UITableView.automaticDimension
         case 1:
-            return 250
+            return 150
         case 2:
             return UITableView.automaticDimension
         default:

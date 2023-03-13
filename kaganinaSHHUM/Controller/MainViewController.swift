@@ -3,10 +3,223 @@
 //  kaganinaSHHUM
 //
 
+
 import Foundation
 import UIKit
 
+/*
+
+final class NewsListViewController: UIViewController {
+    private var fetchButton = UIButton()
+    private var tableView = UITableView(frame: .zero, style: .plain)
+    private var isLoading = false
+    private var newsViewModels = [NewsViewModel]()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUI()
+    }
+    
+    private func setupUI() {
+        view.backgroundColor = .systemBackground
+        setupFetchButton()
+        configureTableView()
+    }
+    
+    private func configureTableView() {
+        setTableViewUI()
+        setTableViewDelegate()
+        setTableViewCell()
+    }
+    
+    private func setupFetchButton() {
+         navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "arrow.clockwise"),
+            style: .plain,
+            target: self,
+            action: #selector(fetchButtonPressed)
+         )
+        navigationItem.rightBarButtonItem?.tintColor = .label
+        
+        fetchButton.configuration = createFetchButtonConfig()
+        fetchButton.alpha = 0.75
+        
+        view.addSubview(fetchButton)
+        fetchButton.pinLeft(to: view, 16)
+        fetchButton.pinRight(to: view, 16)
+        fetchButton.pinBottom(to: view.safeAreaLayoutGuide.bottomAnchor)
+        
+        fetchButton.addTarget(self, action: #selector(fetchButtonPressed(_:)), for: .touchUpInside)
+    }
+    
+    func createFetchButtonConfig() -> UIButton.Configuration {
+        var config: UIButton.Configuration = .filled()
+        config.background.backgroundColor = .label
+        config.baseBackgroundColor = .label
+        config.baseForegroundColor = .systemBackground
+        config.title = "Fetch new articles"
+        config.attributedTitle?.font = .systemFont(ofSize: 16, weight: .medium)
+        config.buttonSize = .medium
+        config.background.cornerRadius = 12
+        return config
+    }
+
+    private func setTableViewDelegate() {
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+    
+    private func setTableViewUI() {
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
+        
+        view.addSubview(tableView)
+        tableView.rowHeight = view.frame.size.height / 10
+        tableView.pinTop(to: view.safeAreaLayoutGuide.topAnchor)
+        tableView.pinLeft(to: view)
+        tableView.pinRight(to: view)
+        tableView.pinBottom(to: view, view.frame.size.height / 10)
+    }
+    
+    private func setTableViewCell() {
+        tableView.register(NewsCell.self, forCellReuseIdentifier: NewsCell.reuseIdentifier)
+    }
+
+    private func fetchNews() {
+        ApiService.shared.getTopStories {
+            [weak self] result in switch result {
+            case .success(let articles):
+                for i in articles.articles {
+                    self?.newsViewModels.append(NewsViewModel(
+                        title: i.title,
+                        description: i.description,
+                        imageURL: URL(string: i.urlToImage ?? "")
+                    ))
+                }
+                DispatchQueue.main.async {
+                    self?.isLoading = false
+                    self?.tableView.reloadData()
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    @objc
+    private func fetchButtonPressed(_ sender: UIButton) {
+        fetchNews()
+    }
+    
+    @objc
+    private func goBack() {
+        self.navigationController?.popViewController(animated: true)
+    }
+}
+
+extension NewsListViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isLoading { }
+        else {
+            return newsViewModels.count
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if isLoading {}
+        else {
+            let viewModel = newsViewModels[indexPath.row]
+            if let newsCell = tableView.dequeueReusableCell(withIdentifier: NewsCell.reuseIdentifier,
+                                                            for: indexPath) as? NewsCell {
+                newsCell.configure(with: viewModel)
+                return newsCell
+            }
+        }
+        return UITableViewCell()
+    }
+}
+
+extension NewsListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if !isLoading {
+            let newsVC = NewsViewController()
+            newsVC.configure(with: newsViewModels[indexPath.row])
+            navigationController?.pushViewController(newsVC, animated: true)
+        }
+    }
+}
+
+
+*/
+
+/// _________________________________
+
+
+
+import Foundation
+import UIKit
+
+extension MainViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return posts.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+       // if isLoading {}
+      //  else {
+        let post = posts[indexPath.row]
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PostPreviewTableViewCell.identifier, for: indexPath) as? PostPreviewTableViewCell else {
+            fatalError()
+        }
+        let viewModel = PostPreviewTableViewCellViewModel(title: post.title, imageURL: post.headerImageURL)
+        cell.configure(with: viewModel)
+        return cell
+       // }
+      //  return UITableViewCell()
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
+        HapticsManager.shared.vibrateForSelection()
+
+        let vc = PostViewController(
+            post: posts[indexPath.row]
+        )
+        vc.navigationItem.largeTitleDisplayMode = .never
+        vc.title = "Post"
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+}
+
 final class MainViewController: UIViewController {
+    
+    private var posts: [Post] = []
+    
+    private func fetchAllPosts() {
+        print("Fetching feed...")
+        DatabaseManager.shared.getAllPosts { [weak self] posts in
+            self?.posts = posts
+            print("Found \(posts.count) posts")
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
+    }
+    
+    private let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.register(PostPreviewTableViewCell.self, forCellReuseIdentifier: PostPreviewTableViewCell.identifier)
+        return tableView
+    }()
+    
     
     private let composeButton: UIButton = {
         let button = UIButton()
@@ -35,21 +248,33 @@ final class MainViewController: UIViewController {
         
         setupView()
         setupNavBar()
+        
+        fetchAllPosts()
+    }
+    
+    override func viewDidAppear(_ animeted: Bool) {
+        super.viewDidAppear(animeted)
+        fetchAllPosts()
     }
     
     private func setupView() {
         self.view.backgroundColor = .systemBackground
+        
+        view.addSubview(tableView)
+        tableView.dataSource = self
+        tableView.delegate = self
         
         view.addSubview(composeButton)
         
         composeButton.addTarget(self, action: #selector(composeButtonPressed), for: .touchUpInside)
         
         composeButton.frame = CGRect(
-            x: view.frame.size.width - 80 - 16,
-            y: view.frame.size.height - 160 - 16 - view.safeAreaInsets.bottom,
+            x: view.frame.size.width - 80,
+            y: view.frame.size.height - 160 - view.safeAreaInsets.bottom,
             width: 50,
             height: 50)
 
+        tableView.frame = view.bounds
     }
     
     private func setupNavBar() {

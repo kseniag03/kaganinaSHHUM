@@ -18,7 +18,7 @@ final class DatabaseManager {
         user: User,
         completion: @escaping (Bool) -> Void
     ) {
-        
+        //
     }
     
     public func insert(
@@ -77,7 +77,42 @@ final class DatabaseManager {
     public func getAllPosts(
         completion: @escaping ([Post]) -> Void
     ) {
-        
+        database
+            .collection("users")
+            .getDocuments { [weak self] snapshot, error in
+                guard let documents = snapshot?.documents.compactMap({ $0.data() }),
+                      error == nil
+                else { return }
+                
+                let emails: [String] = documents.compactMap({ $0["email"] as? String })
+                
+                print("Got emails: \(emails)")
+                
+                guard !emails.isEmpty
+                else {
+                    completion([])
+                    return
+                }
+                
+                let group = DispatchGroup()
+                var result: [Post] = []
+                
+                for email in emails {
+                    group.enter()
+                    self?.getPosts(for: email) { userPost in
+                        defer {
+                            group.leave()
+                        }
+                        result.append(contentsOf: userPost)
+                    }
+                }
+                
+                group.notify(queue: .global()) {
+                    print("Feed posts count: \(result.count)")
+                    completion(result)
+                }
+                
+            }
     }
     
     public func getPosts(
@@ -94,9 +129,7 @@ final class DatabaseManager {
             .getDocuments { snapshot, error in
                 guard let documents = snapshot?.documents.compactMap({ $0.data() }),
                       error == nil
-                else {
-                    return
-                }
+                else { return }
 
                 let posts: [Post] = documents.compactMap({ dictionary in
                     guard let id = dictionary["id"] as? String,
@@ -108,6 +141,14 @@ final class DatabaseManager {
                         print("Invalid post fetch conversion")
                         return nil
                     }
+                    
+                    print()
+                    print("imageIRLString = \(imageURLString)")
+                    print()
+                    
+                    print()
+                    print("imageIRLString = \(String(describing: URL(string: imageURLString)))")
+                    print()
 
                     let post = Post(
                         id: id,

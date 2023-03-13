@@ -7,11 +7,11 @@ import Foundation
 import UIKit
 
 final class PostHeaderTableViewCellViewModel {
-    let imageUrl: URL?
+    let imageURL: URL?
     var imageData: Data?
 
-    init(imageUrl: URL?) {
-        self.imageUrl = imageUrl
+    init(imageURL: URL?) {
+        self.imageURL = imageURL
     }
 }
 
@@ -48,13 +48,17 @@ final class PostHeaderTableViewCell: UITableViewCell {
 
     func configure(with viewModel: PostHeaderTableViewCellViewModel) {
         if let data = viewModel.imageData {
-            postImageView.image = UIImage(data: data)
+            DispatchQueue.main.async { [weak self] in
+                self?.postImageView.image = UIImage(data: data)
+            }
         }
-        else if let url = viewModel.imageUrl {
+        else if let url = viewModel.imageURL {
             // Fetch image & cache
-            let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+            
+            let request = URLRequest(url: url)
+            
+            let task = URLSession.shared.dataTask(with: request) { [weak self] data, _, _ in
                 guard let data = data else { return }
-
                 viewModel.imageData = data
                 DispatchQueue.main.async {
                     self?.postImageView.image = UIImage(data: data)

@@ -49,12 +49,22 @@ final class PostPreviewTableViewCell: UITableViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        /*
         postImageView.frame = CGRect(
             x: separatorInset.left,
             y: 5,
             width: contentView.frame.size.height-10,
             height: contentView.frame.size.height-10
+        )*/
+        
+        postImageView.frame = CGRect(
+            x: contentView.frame.size.width - 60,
+            y: 10,
+            width: 50,
+            height: 50
         )
+        
+        
         postTitleLabel.frame = CGRect(
             x: postImageView.frame.origin.x + postImageView.frame.size.width+5,
             y: 5,
@@ -70,20 +80,66 @@ final class PostPreviewTableViewCell: UITableViewCell {
     }
 
     func configure(with viewModel: PostPreviewTableViewCellViewModel) {
+        
+        print("configure entered ££")
+        
+        print("viewModel.imageData.description = \(String(describing: viewModel.imageData?.description))")
+        print("viewModel.imageURL = \(String(describing: viewModel.imageURL?.absoluteString))")
+        
         postTitleLabel.text = viewModel.title
 
         if let data = viewModel.imageData {
+            
+            print("111111111 IMAGE FOUND!!!!")
+            postImageView.backgroundColor = .magenta
+            
             postImageView.image = UIImage(data: data)
         }
+        
+        /*
+         
+         if let ref = profilePhotoRef {
+             // fetch image
+             print("found photo ref: \(ref)")
+             StorageManager.shared.dowloadURLForProfilePhoto(path: ref) { url in
+                 guard let url = url else { return }
+                 let task = URLSession.shared.dataTask(with: url) { data, _, _ in
+                     guard let data = data else { return }
+                     
+                     DispatchQueue.main.async {
+                         profilePhoto.image = UIImage(data: data)
+                     }
+                 }
+                 task.resume()
+             }
+         }
+         
+         
+         */
+        
+        
         else if let url = viewModel.imageURL {
+            
+            print("ELSE IF COME HERE")
             // Fetch image & cache
-            let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+            
+            let request = URLRequest(url: url)
+            
+            let task = URLSession.shared.dataTask(with: request) { [weak self] data, _, _ in
+
+                print("goted data: \(String(describing: data))")
+                
                 guard let data = data else {
                     return
                 }
 
                 viewModel.imageData = data
                 DispatchQueue.main.async {
+                    
+                    print("222222222 IMAGE FOUND!!!!")
+                    self?.postImageView.backgroundColor = .systemTeal
+                    
+                    
                     self?.postImageView.image = UIImage(data: data)
                 }
             }
