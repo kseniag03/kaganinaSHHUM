@@ -4,6 +4,8 @@
 //
 
 import Foundation
+//import TTGTagCollectionView
+import TTGTags
 import UIKit
 
 
@@ -77,27 +79,107 @@ extension CreateNewPostViewController: UIDocumentPickerDelegate {
     
 }
 
-/*
-extension CreateNewPostViewController: TagPickerViewControllerDelegate {
+extension CreateNewPostViewController: TTGTextTagCollectionViewDelegate {
     
     @objc
-    private func didTapTagPickerButton() {
-        // Present tag picker
-        // ...
-        //tagPicker.delegate = self
-        //delegate?.attachmentCellDidTapTagPicker(tagPicker)
+    private func tagPickerButtonPressed() {
+        
+        titleField.backgroundColor = .brown
+        
+        print("Tag Tapped!!!!")
+        let picker = TagListViewController()
+        picker.navigationItem.largeTitleDisplayMode = .always
+        let navVc = UINavigationController(rootViewController: picker)
+        navVc.navigationBar.prefersLargeTitles = true
+        navVc.modalPresentationStyle = .fullScreen
+        present(navVc, animated: true, completion: nil)
+        
     }
- 
-    func tagPickerViewControllerDidFinish(_ viewController: TagPickerViewController, selectedTags: [String]) {
+ /*
+    func tagPickerViewControllerDidFinish(_ viewController: TagListViewController, selectedTags: [TTGTextTag]) {
         // Handle the selected tags
         // ...
     }
+    */
+}
+
+extension TagListViewController: TTGTextTagCollectionViewDelegate {
+    
     
 }
-*/
 
 
+final class TagListViewController: UIViewController {
+    
+    let collectionView = TTGTextTagCollectionView()
+    
+    var tagsList: [TTGTextTag] = []
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupView()
+        setupNavBar()
+    }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        collectionView.frame = CGRect(
+            x: 100,
+            y: 100,
+            width: view.frame.size.width - 20,
+            height: view.frame.size.height / 2
+        )
+    }
+    
+    private func setupView() {
+        view.backgroundColor = .systemBackground
+        
+        collectionView.alignment = .fillByExpandingSpace
+        collectionView.delegate = self
+        
+        view.addSubview(collectionView)
+        
+        let config = TTGTextTagStyle()
+        config.backgroundColor = .systemBlue
+        config.borderColor = .link
+        config.borderWidth = 2
+        
+        let tags = [
+            "Зима", "Дождь", "Природа", "Лес",
+            "Животные", "Люди", "Диалоги", "Голоса", "Шёпот",
+            "Город", "Метро", "Шум", "Дорога", "Большие города", "Клуб", "Вечеринка"
+        ]
+        
+        for tag in tags {
+            let textTag = TTGTextTag(content: TTGTextTagStringContent(text: tag), style: config)
+            collectionView.addTag(textTag)
+        }
+        
+        collectionView.reload()
+    }
+    
+    private func setupNavBar() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: "Cancel",
+            style: .done,
+            target: self,
+            action: #selector(dismissViewController)
+        )
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "Select",
+            style: .done,
+            target: self,
+            action: #selector(dismissViewController) // !!! change
+        )
+    }
+
+    @objc
+    private func dismissViewController() {
+        dismiss(animated: true, completion: nil)
+    }
+}
 
 final class CreateNewPostViewController: UIViewController {
     
@@ -147,9 +229,9 @@ final class CreateNewPostViewController: UIViewController {
         super.viewDidLayoutSubviews()
         
         attachment.frame = CGRect(
-            x: (view.frame.size.width - (view.frame.size.width / 4)) / 2,
+            x: (view.frame.size.width - (view.frame.size.width / 4)) / 3,
             y: view.frame.size.height - 160 - view.safeAreaInsets.bottom,
-            width: view.frame.size.width / 5,
+            width: view.frame.size.width,
             height: view.frame.size.width / 4
         )
 
@@ -190,13 +272,11 @@ final class CreateNewPostViewController: UIViewController {
         )
         
         let tagPicButton = Style.shared.makeMenuButton(title: "Теги", .systemGray6, .darkGray)
-        /*
         tagPicButton.addTarget(
             self,
-            action: #selector(didTapTagPickerButton),
+            action: #selector(tagPickerButtonPressed),
             for: .touchUpInside
         )
-        */
         
         attachment = UIStackView(
             arrangedSubviews: [ imagePicButton, recordPicButton, tagPicButton ]
