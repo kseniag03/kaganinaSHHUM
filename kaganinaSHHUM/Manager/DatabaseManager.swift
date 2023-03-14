@@ -32,10 +32,11 @@ final class DatabaseManager {
 
         let data: [String: Any] = [
             "id": post.id,
+            "created": post.timestamp,
             "title": post.title,
             "discription": post.text,
-            "created": post.timestamp,
-            "headerImageURL": post.headerImageURL?.absoluteString ?? ""
+            "headerImageURL": post.headerImageURL?.absoluteString ?? "",
+            "recordFileURL": post.recordFileURL?.absoluteString ?? ""
         ]
 
         database
@@ -133,9 +134,9 @@ final class DatabaseManager {
 
                 let posts: [Post] = documents.compactMap({ dictionary in
                     guard let id = dictionary["id"] as? String,
+                          let created = dictionary["created"] as? TimeInterval,
                           let title = dictionary["title"] as? String,
                           let discription = dictionary["discription"] as? String,
-                          let created = dictionary["created"] as? TimeInterval,
                           let imageURLString = dictionary["headerImageURL"] as? String,
                           let recordURLString = dictionary["recordFileURL"] as? String
                     else {

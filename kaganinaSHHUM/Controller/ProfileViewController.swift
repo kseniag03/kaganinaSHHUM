@@ -29,31 +29,10 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 
         HapticsManager.shared.vibrateForSelection()
 
-        var isOwnedByCurrentUser = false
-        if let email = UserDefaults.standard.string(forKey: "email") {
-            isOwnedByCurrentUser = email == currentEmail
-        }
-
-        if !isOwnedByCurrentUser {
-            let vc = PostViewController(
-                post: posts[indexPath.row],
-                isOwnedByCurrentUser: isOwnedByCurrentUser
-            )
-            vc.navigationItem.largeTitleDisplayMode = .never
-            vc.title = "Post"
-            navigationController?.pushViewController(vc, animated: true)
-        }
-        else {
-            // Our post
-            let vc = PostViewController(
-                post: posts[indexPath.row],
-                isOwnedByCurrentUser: isOwnedByCurrentUser
-            )
-            vc.navigationItem.largeTitleDisplayMode = .never
-            vc.title = "Post"
-            navigationController?.pushViewController(vc, animated: true)
-
-        }
+        let vc = PostViewController(post: posts[indexPath.row])
+        vc.navigationItem.largeTitleDisplayMode = .never
+        vc.title = "Post"
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

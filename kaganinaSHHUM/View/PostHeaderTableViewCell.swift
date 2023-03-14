@@ -15,6 +15,15 @@ final class PostHeaderTableViewCellViewModel {
     }
 }
 
+final class PostSoundTableViewCellViewModel {
+    let recordURL: URL?
+    var recordData: Data?
+
+    init(recordURL: URL?) {
+        self.recordURL = recordURL
+    }
+}
+
 final class PostHeaderTableViewCell: UITableViewCell {
     static let identifier = "PostHeaderTableViewCell"
 

@@ -9,11 +9,9 @@ import UIKit
 final class PostViewController: UITabBarController {
     
     private let post: Post
-    private let isOwnedByCurrentUser: Bool
 
-    init(post: Post, isOwnedByCurrentUser: Bool = false) {
+    init(post: Post) {
         self.post = post
-        self.isOwnedByCurrentUser = isOwnedByCurrentUser
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -54,7 +52,7 @@ extension PostViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3 // title, iamge, text // + audio!!!!!!
+        return 4 // title, image, text // + audio!!!!!!
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -90,7 +88,17 @@ extension PostViewController: UITableViewDataSource, UITableViewDelegate {
             cell.textLabel?.text = post.text
             return cell
             
-            // case 3 for audio
+        case 3: // audio
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: PostHeaderTableViewCell.identifier,
+                for: indexPath)
+                    as? PostHeaderTableViewCell
+            else {
+                fatalError()
+            }
+            cell.selectionStyle = .none
+            cell.configure(with: .init(imageURL: post.headerImageURL))
+            return cell
             
         default:
             fatalError()
@@ -105,6 +113,8 @@ extension PostViewController: UITableViewDataSource, UITableViewDelegate {
         case 1:
             return 150
         case 2:
+            return UITableView.automaticDimension
+        case 3:
             return UITableView.automaticDimension
         default:
             return UITableView.automaticDimension
