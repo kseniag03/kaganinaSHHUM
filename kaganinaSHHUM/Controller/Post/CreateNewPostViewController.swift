@@ -4,29 +4,8 @@
 //
 
 import Foundation
-//import TTGTagCollectionView
 import TTGTags
 import UIKit
-
-
-
-class HapticsManager {
-    static let shared = HapticsManager()
-
-    private init() {}
-
-    func vibrateForSelection() {
-        let generator = UISelectionFeedbackGenerator()
-        generator.prepare()
-        generator.selectionChanged()
-    }
-
-    func vibrate(for type: UINotificationFeedbackGenerator.FeedbackType) {
-        let generator = UINotificationFeedbackGenerator()
-        generator.prepare()
-        generator.notificationOccurred(type)
-    }
-}
 
 extension CreateNewPostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -53,12 +32,20 @@ extension CreateNewPostViewController: UIImagePickerControllerDelegate, UINaviga
 extension CreateNewPostViewController: UIDocumentPickerDelegate {
     
     @objc
-    private func recordPickerButtonPressed() {
+    private func composeButtonPressed() {
         let documentTypes = ["public.mp3", "public.m4a"]
         let picker = UIDocumentPickerViewController(documentTypes: documentTypes, in: .import)
         picker.allowsMultipleSelection = false
         picker.delegate = self
         present(picker, animated: true)
+    }
+    
+    @objc
+    private func recordPickerButtonPressed() {
+        let recordStoreController = RecordStoreViewController()
+        recordStoreController.view.backgroundColor = .systemPurple
+        navigationController?.pushViewController(recordStoreController, animated: true)
+        
     }
     
     func documentPickerWasCancelled(_ picker: UIDocumentPickerViewController) {
@@ -69,13 +56,6 @@ extension CreateNewPostViewController: UIDocumentPickerDelegate {
         picker.dismiss(animated: true, completion: nil)
         selectedRecordFile = url
     }
-
-    /*
-    func documentPicker(_ picker: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        // Handle the selected audio file
-        // no multiple picking...
-    }
-    */
     
 }
 
@@ -83,9 +63,6 @@ extension CreateNewPostViewController: TTGTextTagCollectionViewDelegate {
     
     @objc
     private func tagPickerButtonPressed() {
-        
-        titleField.backgroundColor = .brown
-        
         print("Tag Tapped!!!!")
         let picker = TagListViewController()
         picker.navigationItem.largeTitleDisplayMode = .always
@@ -93,92 +70,9 @@ extension CreateNewPostViewController: TTGTextTagCollectionViewDelegate {
         navVc.navigationBar.prefersLargeTitles = true
         navVc.modalPresentationStyle = .fullScreen
         present(navVc, animated: true, completion: nil)
-        
-    }
- /*
-    func tagPickerViewControllerDidFinish(_ viewController: TagListViewController, selectedTags: [TTGTextTag]) {
-        // Handle the selected tags
-        // ...
-    }
-    */
-}
-
-extension TagListViewController: TTGTextTagCollectionViewDelegate {
-    
-    
-}
-
-
-final class TagListViewController: UIViewController {
-    
-    let collectionView = TTGTextTagCollectionView()
-    
-    var tagsList: [TTGTextTag] = []
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupView()
-        setupNavBar()
+        selectedTags = picker.getSelectedTags()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        collectionView.frame = CGRect(
-            x: 100,
-            y: 100,
-            width: view.frame.size.width - 20,
-            height: view.frame.size.height / 2
-        )
-    }
-    
-    private func setupView() {
-        view.backgroundColor = .systemBackground
-        
-        collectionView.alignment = .fillByExpandingSpace
-        collectionView.delegate = self
-        
-        view.addSubview(collectionView)
-        
-        let config = TTGTextTagStyle()
-        config.backgroundColor = .systemBlue
-        config.borderColor = .link
-        config.borderWidth = 2
-        
-        let tags = [
-            "Зима", "Дождь", "Природа", "Лес",
-            "Животные", "Люди", "Диалоги", "Голоса", "Шёпот",
-            "Город", "Метро", "Шум", "Дорога", "Большие города", "Клуб", "Вечеринка"
-        ]
-        
-        for tag in tags {
-            let textTag = TTGTextTag(content: TTGTextTagStringContent(text: tag), style: config)
-            collectionView.addTag(textTag)
-        }
-        
-        collectionView.reload()
-    }
-    
-    private func setupNavBar() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            title: "Cancel",
-            style: .done,
-            target: self,
-            action: #selector(dismissViewController)
-        )
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "Select",
-            style: .done,
-            target: self,
-            action: #selector(dismissViewController) // !!! change
-        )
-    }
-
-    @objc
-    private func dismissViewController() {
-        dismiss(animated: true, completion: nil)
-    }
 }
 
 final class CreateNewPostViewController: UIViewController {
@@ -213,11 +107,33 @@ final class CreateNewPostViewController: UIViewController {
         return textView
     }()
     
+    private let composeButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .systemPink
+        button.tintColor = .white
+        
+        button.setImage(UIImage(
+            systemName: "square.and.arrow.up.circle.fill",
+            withConfiguration: UIImage.SymbolConfiguration(
+                pointSize: 32,
+                weight: .medium
+            )
+        ), for: .normal)
+        
+        button.layer.cornerRadius = 40
+        button.layer.shadowColor = UIColor.label.cgColor
+        button.layer.shadowOpacity = 0.25
+        button.layer.shadowRadius = 10
+        return button
+    }()
+    
     var attachment = UIStackView()
 
     private var selectedHeaderImage: UIImage?
     
     private var selectedRecordFile: URL?
+    
+    private var selectedTags: [String] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -234,6 +150,12 @@ final class CreateNewPostViewController: UIViewController {
             width: view.frame.size.width,
             height: view.frame.size.width / 4
         )
+        
+        composeButton.frame = CGRect(
+            x: view.frame.size.width - 80,
+            y: view.frame.size.height - 160 - view.safeAreaInsets.bottom,
+            width: 50,
+            height: 50)
 
         titleField.frame = CGRect(
             x: 10,
@@ -286,7 +208,10 @@ final class CreateNewPostViewController: UIViewController {
         attachment.distribution = .fillEqually
         attachment.translatesAutoresizingMaskIntoConstraints = false
         
+        composeButton.addTarget(self, action: #selector(composeButtonPressed), for: .touchUpInside)
+        
         view.addSubview(attachment)
+        view.addSubview(composeButton)
         view.addSubview(headerImageView)
         view.addSubview(textView)
         view.addSubview(titleField)
@@ -320,6 +245,7 @@ final class CreateNewPostViewController: UIViewController {
         let discription = textView.text ?? ""
         let headerImage = selectedHeaderImage
         let recordFile = selectedRecordFile
+        let tags = selectedTags
         
         guard let email = UserDefaults.standard.string(forKey: "email"),
               let title = titleField.text,
@@ -346,13 +272,7 @@ final class CreateNewPostViewController: UIViewController {
             guard success else { return }
             
             StorageManager.shared.downloadURLForPostHeader(email: email, postId: newPostId) { url in
-                guard let headerURL = url
-                else {
-                    DispatchQueue.main.async {
-                        HapticsManager.shared.vibrate(for: .error)
-                    }
-                    return
-                }
+                guard let headerURL = url else { return }
 
                 let post = Post(
                     id: newPostId,
@@ -360,20 +280,14 @@ final class CreateNewPostViewController: UIViewController {
                     title: title,
                     text: discription,
                     headerImageURL: headerURL,
-                    recordFileURL: recordFile
+                    recordFileURL: recordFile,
+                    tags: tags
                 )
 
                 DatabaseManager.shared.insert(post: post, email: email) { [weak self] posted in
-                    guard posted
-                    else {
-                        DispatchQueue.main.async {
-                            HapticsManager.shared.vibrate(for: .error)
-                        }
-                        return
-                    }
+                    guard posted else { return }
 
                     DispatchQueue.main.async {
-                        HapticsManager.shared.vibrate(for: .success)
                         self?.dismissViewController()
                     }
                 }

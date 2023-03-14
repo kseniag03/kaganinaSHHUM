@@ -58,14 +58,6 @@ final class SignUpViewController: UITabBarController {
         return button
     }()
     
- /*   private let createAccountButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Create Account", for: .normal)
-        button.setTitleColor(.link, for: .normal)
-        button.layer.cornerRadius = 12
-        return button
-    }()*/
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -84,10 +76,8 @@ final class SignUpViewController: UITabBarController {
         view.addSubview(emailField)
         view.addSubview(passwordField)
         view.addSubview(signUpButton)
-      //  view.addSubview(createAccountButton)
         
         signUpButton.addTarget(self, action: #selector(signUpButtonPressed), for: .touchUpInside)
-      //  createAccountButton.addTarget(self, action: #selector(createAccountButtonPressed), for: .touchUpInside)
         
         self.view.addSubview(headerView)
         headerView.pinTop(to: self.view.safeAreaLayoutGuide.topAnchor)
@@ -101,17 +91,14 @@ final class SignUpViewController: UITabBarController {
         emailField.pinTop(to: nameField, self.view.frame.size.height / 10)
         emailField.pinLeft(to: self.view, self.view.frame.size.width / 10)
         emailField.pinRight(to: self.view, self.view.frame.size.width / 10)
-       // emailField.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
         
         passwordField.pinTop(to: emailField, self.view.frame.size.height / 10)
         passwordField.pinLeft(to: self.view, self.view.frame.size.width / 10)
         passwordField.pinRight(to: self.view, self.view.frame.size.width / 10)
-       // passwordField.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
         
         signUpButton.pinTop(to: passwordField, self.view.frame.size.height / 10)
         signUpButton.pinLeft(to: self.view, self.view.frame.size.width / 10)
         signUpButton.pinRight(to: self.view, self.view.frame.size.width / 10)
-     //   signInButton.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
         
     }
     
@@ -124,7 +111,6 @@ final class SignUpViewController: UITabBarController {
         
         AuthManager.shared.signUp(email: email, password: password, completion: { [weak self] success in
             if success {
-                // update database
                 let newUser = User(name: name, email: email, profilePhotoRef: nil)
                 DatabaseManager.shared.insert(user: newUser, completion: { inserted in
                     guard inserted else { return }
@@ -140,12 +126,10 @@ final class SignUpViewController: UITabBarController {
                     
                 })
             } else {
-                // dialog window (alert)
                 print("failed to create an account")
             }
             
         })
     }
-    
     
 }

@@ -9,36 +9,18 @@ import UIKit
 
 final class RecorderViewController: UIViewController {
     
-    private let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        .appendingPathComponent("records.json")
+    private var dataSource: [Record] = []
     
-    private var dataSource: [Record] {
-        get {
-            if let data = try? Data(contentsOf: path) {
-                if let records = try? JSONDecoder().decode([Record].self, from: data) {
-                    return records
-                }
-            }
-            return [Record]()
-        }
-    }
+    private var currentRecordId: String?
+    private var currentRecordURL: String?
     
-    var recordingSession: AVAudioSession?
-    var recorder: AVAudioRecorder?
+    private var recordingSession: AVAudioSession?
+    private var recorder: AVAudioRecorder?
     
-    var numberOfRecords: Int = 0
+    private var recordStartButton = UIButton()
+    private var recordStopButton = UIButton()
     
-    let numberStoreKey = "numberOfRecordsKey"
-    let file = "record.m4a"
-    
-    var recordStartButton = UIButton()
-    var recordStopButton = UIButton()
-    
-    let recordStoreController = RecordStoreViewController()
-    
-    private func clearRecordsNumber() {
-        UserDefaults.standard.removeObject(forKey: numberStoreKey)
-    }
+    private let recordStoreController = RecordStoreViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,18 +30,6 @@ final class RecorderViewController: UIViewController {
         setupNavBar()
         
         recordingSession = AVAudioSession.sharedInstance()
-        
-        if dataSource.isEmpty {
-            clearRecordsNumber()
-        }
-        if let number: Int = UserDefaults.standard.object(forKey: numberStoreKey) as? Int {
-            numberOfRecords = number
-        }
-        if (numberOfRecords == 0) {
-            numberOfRecords += 1
-        }
-        
-        print("!!!!!!!!! number of records got : " + String(numberOfRecords))
         
         switch recordingSession?.recordPermission {
         case .granted:
@@ -72,18 +42,6 @@ final class RecorderViewController: UIViewController {
             print("unknown")
         }
     }
-    /*
-    private func makeMenuButton(title: String) -> UIButton {
-        let button = UIButton()
-        button.setTitle(title, for: .normal)
-        button.setTitleColor(.systemGray, for: .normal)
-        button.layer.cornerRadius = 12
-        button.titleLabel?.font = .systemFont(ofSize: 16.0, weight: .medium)
-        button.backgroundColor = .white
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.heightAnchor.constraint(equalTo: button.widthAnchor).isActive = true
-        return button
-    }*/
     
     private func changeButtonState(button: UIButton) {
         if !button.isEnabled {
@@ -98,14 +56,14 @@ final class RecorderViewController: UIViewController {
     private func setupView() {
         self.view.backgroundColor = .blue
 
-        recordStartButton.makeMenuButton(to: recordStartButton, title: "START")
+        recordStartButton = Style.shared.makeMenuButton(title: "START")
         recordStartButton.addTarget(
             self,
             action: #selector(startRecording),
             for: .touchUpInside
         )
         
-        recordStopButton.makeMenuButton(to: recordStopButton, title: "STOP")
+        recordStopButton = Style.shared.makeMenuButton(title: "STOP")
         recordStopButton.addTarget(
             self,
             action: #selector(stopRecording),
@@ -168,33 +126,71 @@ extension RecorderViewController {
 
 extension RecorderViewController: AVAudioRecorderDelegate {
     
+    private func setupRecordURL() {
+        
+        print("setup record url")
+        
+        guard let email = UserDefaults.standard.string(forKey: "email") else { return }
+        
+        let newRecordId = UUID().uuidString
+        
+        StorageManager.shared.downloadURLForRecord(email: email, recordId: newRecordId) { url in
+            guard let recordURL = url else { return }
+
+            let record = Record(
+                id: newRecordId,
+                timestamp: Date().timeIntervalSince1970,
+                recordURL: recordURL
+            )
+
+            DatabaseManager.shared.insert(record: record, email: email) { [weak self] recorded in
+                guard recorded else { return }
+                DispatchQueue.main.async {
+                    self?.currentRecordId = newRecordId
+                    self?.currentRecordURL = recordURL.absoluteString
+                }
+            }
+        }
+    }
+    
     private func setupRecorder() {
         
+        print("setup recorder 1")
+        
         if recorder == nil {
-            //numberOfRecords += 1
-            //UserDefaults.standard.set(numberOfRecords, forKey: numberStoreKey)
             
-            let fileName = getDirectory().appendingPathComponent("\(numberOfRecords).m4a", conformingTo: .url)
+            print("setup record url 1.1")
             
-            let recordSettings = [AVFormatIDKey: kAudioFormatAppleLossless,
-                AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
-                AVEncoderBitRateKey: 320000,
-                AVNumberOfChannelsKey: 2,
-                AVSampleRateKey: 44100.0 ] as [String : Any]
-            
-            do {
-                recorder = try AVAudioRecorder(url: fileName, settings: recordSettings as [String : Any])
-                recorder?.delegate = self
-                recorder?.prepareToRecord()
-            } catch {
-                displayAlert(title: "ERROR", message: "Recording has failed")
-                print("!!!!!! smth is wrong\n")
+            DispatchQueue.main.async {
+                let recordSettings = [
+                    AVFormatIDKey: kAudioFormatAppleLossless,
+                    AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
+                    AVEncoderBitRateKey: 320000,
+                    AVNumberOfChannelsKey: 2,
+                    AVSampleRateKey: 44100.0
+                ] as [String : Any]
+                
+                
+                do {
+                    guard let url = URL(string: self.currentRecordURL ?? "") else { return }
+                    self.recorder = try AVAudioRecorder(url: url, settings: recordSettings as [String : Any])
+                    self.recorder?.delegate = self
+                    self.recorder?.prepareToRecord()
+                } catch {
+                    self.displayAlert(title: "ERROR", message: "Recording has failed")
+                    print("!!!!!! smth is wrong\n")
+                }
             }
         } else {
-            recorder?.stop()
-            recorder = nil
+            print("setup record url 1.2")
+            
+            self.recorder?.stop()
+            self.recorder = nil
         }
-        
+            
+            
+            
+          
     }
     
     @objc
@@ -202,22 +198,42 @@ extension RecorderViewController: AVAudioRecorderDelegate {
         self.view.backgroundColor = .systemTeal
         
         if recorder == nil {
+            setupRecordURL()
             setupRecorder()
         }
         
         if recordStartButton.titleLabel?.text == "START" {
-            recordStopButton.isEnabled = true
-            changeButtonState(button: recordStopButton)
             
-            recorder?.record()
-            recordStartButton.setTitle("PAUSE", for: .normal)
+            
+            
+            DispatchQueue.main.async {
+                
+                print("start recording")
+                
+                self.recordStopButton.isEnabled = true
+                self.changeButtonState(button: self.recordStopButton)
+                
+                self.recorder?.record()
+                self.recordStartButton.setTitle("PAUSE", for: .normal)
+            }
+            
+            
             
         } else {
-            recordStopButton.isEnabled = true
-            changeButtonState(button: recordStopButton)
             
-            recorder?.pause()
-            recordStartButton.setTitle("START", for: .normal)
+            
+            
+            DispatchQueue.main.async {
+                
+                print("pause recording")
+                
+                self.recordStopButton.isEnabled = true
+                self.changeButtonState(button: self.recordStopButton)
+                
+                self.recorder?.pause()
+                self.recordStartButton.setTitle("START", for: .normal)
+            }
+            
         }
         
     }
@@ -226,26 +242,79 @@ extension RecorderViewController: AVAudioRecorderDelegate {
     private func stopRecording() {
         self.view.backgroundColor = .systemPink
         
-        recordStopButton.isEnabled = false
-        changeButtonState(button: recordStopButton)
+        DispatchQueue.main.async {
+            
+            print("stop recording")
+            
+            self.recordStopButton.isEnabled = false
+            self.changeButtonState(button: self.recordStopButton)
+            
+            self.recorder?.stop()
+            
+            print("FINISH RECORDING!!!!!!!!")
+            
+            guard let id = self.currentRecordId,
+                  let url = URL(string: self.currentRecordURL ?? "")
+            else { print("nil"); return }
+            
+            print("current id: \(id)")
+            print("current url: \(url)")
+            
+            self.recordStoreController.newRecordAdded(record: Record(id: id, timestamp: Date().timeIntervalSince1970, recordURL: url))
+            
+            
+            self.recordStartButton.setTitle("START", for: .normal)
+        }
         
-        recorder?.stop()
         
-        recordStartButton.setTitle("START", for: .normal)
     }
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         
-        print("FINISH RECORDING!!!!!!!!")
+        stopRecording()
         
-        let fileName = getDirectory().appendingPathComponent("\(numberOfRecords).m4a", conformingTo: .url)
-        
-        numberOfRecords += 1
-        UserDefaults.standard.set(numberOfRecords, forKey: numberStoreKey)
-        
-        print(fileName)
-        recordStoreController.newRecordAdded(record: Record(recordURL: fileName))
     }
+    
+    func audioRecorder(_ recorder: AVAudioRecorder, didFinishRecording successfully: Bool) {
+        if successfully {
+            do {
+                //let audioData = try Data(contentsOf: recorder.url)
+                // Use the audioData as needed.
+                
+                guard let email = UserDefaults.standard.string(forKey: "email") else { return }
+                
+                
+                StorageManager.shared.uploadUserRecord(email: email, record: recorder.url) { success in
+                    guard success else { return }
+                    
+                    guard let id = self.currentRecordId else { return }
+                    
+                    StorageManager.shared.downloadURLForRecord(email: email, recordId: id) { url in
+                        
+                        guard let recordURL = url else { return }
+
+                        let record = Record(
+                            id: id,
+                            timestamp: Date().timeIntervalSince1970,
+                            recordURL: recordURL
+                        )
+
+                        DatabaseManager.shared.insert(record: record, email: email) { [weak self] saved in
+                            guard saved else { return }
+                            DispatchQueue.main.async {
+                                self?.dataSource.append(record)
+                            }
+                        }
+                    }
+                }
+            } catch {
+                print("Error loading audio data: \(error)")
+            }
+        } else {
+            print("Recording was not successful.")
+        }
+    }
+
 }
 
 // возможность сохранять аудио

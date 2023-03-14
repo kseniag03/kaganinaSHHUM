@@ -16,4 +16,6 @@ struct Post {
     let headerImageURL: URL?
     let recordFileURL: URL?
     
+    let tags: [String]
+    
 }

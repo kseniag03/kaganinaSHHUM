@@ -15,6 +15,8 @@
 		1C3D91BA296B173B009403ED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C3D91B8296B173B009403ED /* LaunchScreen.storyboard */; };
 		1C3D91C2296B1AF6009403ED /* PinLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3D91C1296B1AF6009403ED /* PinLibrary.swift */; };
 		1C3D91C7296B2361009403ED /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3D91C6296B2361009403ED /* Tag.swift */; };
+		1C4B34BC29C0673100693680 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4B34BB29C0673100693680 /* Record.swift */; };
+		1C4B34BE29C0A55900693680 /* TagListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4B34BD29C0A55900693680 /* TagListViewController.swift */; };
 		1C766EE029BA09A500BF9CF5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C766EDF29BA09A500BF9CF5 /* ViewController.swift */; };
 		1C82C3EF29BE19F5004F7D50 /* RecordStoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C3EE29BE19F5004F7D50 /* RecordStoreViewController.swift */; };
 		1C82C3F129BE1A62004F7D50 /* RecordPlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C3F029BE1A62004F7D50 /* RecordPlayViewController.swift */; };
@@ -49,6 +51,8 @@
 		1C3D91BB296B173B009403ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1C3D91C1296B1AF6009403ED /* PinLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinLibrary.swift; sourceTree = "<group>"; };
 		1C3D91C6296B2361009403ED /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
+		1C4B34BB29C0673100693680 /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
+		1C4B34BD29C0A55900693680 /* TagListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListViewController.swift; sourceTree = "<group>"; };
 		1C766EDF29BA09A500BF9CF5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../../ViewController.swift; sourceTree = "<group>"; };
 		1C82C3EE29BE19F5004F7D50 /* RecordStoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordStoreViewController.swift; sourceTree = "<group>"; };
 		1C82C3F029BE1A62004F7D50 /* RecordPlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordPlayViewController.swift; sourceTree = "<group>"; };
@@ -154,6 +158,7 @@
 				1C3D91C6296B2361009403ED /* Tag.swift */,
 				1C82C40529BE508B004F7D50 /* User.swift */,
 				1C82C40729BE509D004F7D50 /* Post.swift */,
+				1C4B34BB29C0673100693680 /* Record.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -192,6 +197,7 @@
 			children = (
 				1C82C3FB29BE1D23004F7D50 /* PostViewController.swift */,
 				1C82C3F929BE1CFD004F7D50 /* CreateNewPostViewController.swift */,
+				1C4B34BD29C0A55900693680 /* TagListViewController.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -344,12 +350,14 @@
 				1C82C3EF29BE19F5004F7D50 /* RecordStoreViewController.swift in Sources */,
 				1C82C3F129BE1A62004F7D50 /* RecordPlayViewController.swift in Sources */,
 				1C82C40029BE1DA3004F7D50 /* StorageManager.swift in Sources */,
+				1C4B34BE29C0A55900693680 /* TagListViewController.swift in Sources */,
 				1C82C40A29BE55AE004F7D50 /* TabBarViewController.swift in Sources */,
 				1CF14545296C5FAE00DDE53B /* SearchViewController.swift in Sources */,
 				1C766EE029BA09A500BF9CF5 /* ViewController.swift in Sources */,
 				1C82C3F629BE1CC4004F7D50 /* SignInViewController.swift in Sources */,
 				1C1FECD229BB2E1100D18911 /* MainViewController.swift in Sources */,
 				1C82C40D29BF0C8E004F7D50 /* SignInHeaderView.swift in Sources */,
+				1C4B34BC29C0673100693680 /* Record.swift in Sources */,
 				1C82C3FE29BE1D7E004F7D50 /* AuthManager.swift in Sources */,
 				1C3D91AE296B173A009403ED /* AppDelegate.swift in Sources */,
 				1C82C3FC29BE1D23004F7D50 /* PostViewController.swift in Sources */,

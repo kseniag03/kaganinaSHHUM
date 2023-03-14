@@ -85,23 +85,18 @@ final class SignInViewController: UITabBarController {
         emailField.pinTop(to: headerView, self.view.frame.size.height / 10)
         emailField.pinLeft(to: self.view, self.view.frame.size.width / 10)
         emailField.pinRight(to: self.view, self.view.frame.size.width / 10)
-       // emailField.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
         
         passwordField.pinTop(to: emailField, self.view.frame.size.height / 10)
         passwordField.pinLeft(to: self.view, self.view.frame.size.width / 10)
         passwordField.pinRight(to: self.view, self.view.frame.size.width / 10)
-       // passwordField.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
         
         signInButton.pinTop(to: passwordField, self.view.frame.size.height / 10)
         signInButton.pinLeft(to: self.view, self.view.frame.size.width / 10)
         signInButton.pinRight(to: self.view, self.view.frame.size.width / 10)
-     //   signInButton.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
         
         createAccountButton.pinTop(to: signInButton, self.view.frame.size.height / 10)
         createAccountButton.pinLeft(to: self.view, self.view.frame.size.width / 10)
-        createAccountButton.pinRight(to: self.view, self.view.frame.size.width / 10)
-      //  createAccountButton.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
-        
+        createAccountButton.pinRight(to: self.view, self.view.frame.size.width / 10)        
     }
     
     @objc

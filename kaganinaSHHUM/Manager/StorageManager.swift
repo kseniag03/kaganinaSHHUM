@@ -80,6 +80,44 @@ final class StorageManager {
             }
     }
     
+    public func uploadUserRecord(
+        email: String,
+        record: URL,
+        completion: @escaping (Bool) -> Void
+    ) {
+        let path = email
+            .replacingOccurrences(of: ".", with: "_")
+            .replacingOccurrences(of: "@", with: "_")
+
+        container
+            .reference(withPath: "user_records/\(path)/")
+            .putFile(from: record)
+    }
+    
+    public func uploadPostRecord( // ...
+        email: String,
+        audioData: Data,
+        postId: String,
+        completion: @escaping (Bool) -> Void
+    ) {
+        let path = email
+            .replacingOccurrences(of: ".", with: "_")
+            .replacingOccurrences(of: "@", with: "_")
+        
+        //guard let data = audioData else { return }
+
+        container
+            .reference(withPath: "user_records/\(path)/\(postId).m4a")
+            .putData(audioData, metadata: nil) { metadata, error in
+                guard metadata != nil, error == nil
+                else {
+                    completion(false)
+                    return
+                }
+                completion(true)
+            }
+    }
+    
     /*
     public func dowloadURLForPostHeaderImage(
         post: Post,
@@ -104,6 +142,27 @@ final class StorageManager {
 
         container
             .reference(withPath: "post_headers/\(path)/\(postId).png")
+            .downloadURL { url, _ in
+                completion(url)
+            }
+    }
+    
+    public func downloadURLForRecord(
+        email: String,
+        recordId: String,
+        completion: @escaping (URL?) -> Void
+    ) {
+        let path = email
+            .replacingOccurrences(of: ".", with: "_")
+            .replacingOccurrences(of: "@", with: "_")
+        
+        
+        let picPath = "user_records/\(path)/\(recordId).png"
+        
+        print("!!! picPath = \(picPath)")
+
+        container
+            .reference(withPath: "user_records/\(path)/\(recordId).png")
             .downloadURL { url, _ in
                 completion(url)
             }

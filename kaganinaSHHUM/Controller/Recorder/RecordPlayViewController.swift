@@ -39,19 +39,7 @@ final class RecordPlayViewController: UIViewController {
         setupView()
         setupNavBar()
     }
- /*
-    private func makeMenuButton(title: String) -> UIButton {
-        let button = UIButton()
-        button.setTitle(title, for: .normal)
-        button.setTitleColor(.systemGray, for: .normal)
-        button.layer.cornerRadius = 12
-        button.titleLabel?.font = .systemFont(ofSize: 16.0, weight: .medium)
-        button.backgroundColor = .white
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.heightAnchor.constraint(equalTo: button.widthAnchor).isActive = true
-        return button
-    }
-   */
+
     private func changeButtonState(button: UIButton) {
         if !button.isEnabled {
             button.setImage(UIImage(named: "play.fill"), for: .normal)
@@ -62,7 +50,7 @@ final class RecordPlayViewController: UIViewController {
     
     private func setupView() {
 
-        recordPlayButton.makeMenuButton(to: recordPlayButton, title: "PLAY")
+        recordPlayButton = Style.shared.makeMenuButton(title: "PLAY")
         recordPlayButton.setImage(UIImage(named: "play.fill"), for: .normal)
         recordPlayButton.addTarget(
             self,
@@ -70,7 +58,7 @@ final class RecordPlayViewController: UIViewController {
             for: .touchUpInside
         )
         
-        recordStopPlayButton.makeMenuButton(to: recordStopPlayButton, title: "STOP PLAY")
+        recordStopPlayButton = Style.shared.makeMenuButton(title: "STOP PLAY")
         recordStopPlayButton.setImage(UIImage(named: "stop.fill"), for: .normal)
         recordStopPlayButton.addTarget(
             self,
@@ -89,7 +77,6 @@ final class RecordPlayViewController: UIViewController {
         buttonsSV.pinLeft(to: self.view, self.view.frame.size.width / 10)
         buttonsSV.pinRight(to: self.view, self.view.frame.size.width / 10)
         buttonsSV.pinBottom(to: self.view.safeAreaLayoutGuide.bottomAnchor)
-        //buttonsSV.pinHeight(to: self.view.safeAreaLayoutGuide.heightAnchor)
     }
     
     private func setupNavBar() {

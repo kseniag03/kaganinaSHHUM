@@ -27,8 +27,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        HapticsManager.shared.vibrateForSelection()
-
         let vc = PostViewController(post: posts[indexPath.row])
         vc.navigationItem.largeTitleDisplayMode = .never
         vc.title = "Post"
@@ -120,6 +118,10 @@ final class ProfileViewController: UIViewController {
         setupNavBar()
         setupTableView()
         setupTableViewHeader()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchProfileData()
         fetchPosts()
     }

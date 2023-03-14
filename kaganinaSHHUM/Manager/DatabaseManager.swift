@@ -36,7 +36,8 @@ final class DatabaseManager {
             "title": post.title,
             "discription": post.text,
             "headerImageURL": post.headerImageURL?.absoluteString ?? "",
-            "recordFileURL": post.recordFileURL?.absoluteString ?? ""
+            "recordFileURL": post.recordFileURL?.absoluteString ?? "",
+            "tags": post.tags
         ]
 
         database
@@ -44,6 +45,31 @@ final class DatabaseManager {
             .document(userEmail)
             .collection("posts")
             .document(post.id)
+            .setData(data) { error in
+                completion(error == nil)
+            }
+    }
+    
+    public func insert(
+        record: Record,
+        email: String,
+        completion: @escaping (Bool) -> Void
+    ) {
+        let userEmail = email
+            .replacingOccurrences(of: ".", with: "_")
+            .replacingOccurrences(of: "@", with: "_")
+
+        let data: [String: Any] = [
+            "id": record.id,
+            "created": record.timestamp,
+            "recordFileURL": record.recordURL //.absoluteString
+        ]
+
+        database
+            .collection("users")
+            .document(userEmail)
+            .collection("records")
+            .document(record.id)
             .setData(data) { error in
                 completion(error == nil)
             }
@@ -138,7 +164,8 @@ final class DatabaseManager {
                           let title = dictionary["title"] as? String,
                           let discription = dictionary["discription"] as? String,
                           let imageURLString = dictionary["headerImageURL"] as? String,
-                          let recordURLString = dictionary["recordFileURL"] as? String
+                          let recordURLString = dictionary["recordFileURL"] as? String,
+                          let tags = dictionary["tags"] as? [String]
                     else {
                         print("Invalid post fetch conversion")
                         return nil
@@ -156,12 +183,59 @@ final class DatabaseManager {
                         title: title,
                         text: discription,
                         headerImageURL: URL(string: imageURLString),
-                        recordFileURL: URL(string: recordURLString)
+                        recordFileURL: URL(string: recordURLString),
+                        tags: tags
                     )
                     return post
                 })
 
                 completion(posts)
+            }
+    }
+    
+    public func getRecords(
+        for email: String,
+        completion: @escaping ([Record]) -> Void
+    ) {
+        let userEmail = email
+            .replacingOccurrences(of: ".", with: "_")
+            .replacingOccurrences(of: "@", with: "_")
+        database
+            .collection("users")
+            .document(userEmail)
+            .collection("records")
+            .getDocuments { snapshot, error in
+                guard let documents = snapshot?.documents.compactMap({ $0.data() }),
+                      error == nil
+                else { return }
+
+                let records: [Record] = documents.compactMap({ dictionary in
+                    guard let id = dictionary["id"] as? String,
+                          let created = dictionary["created"] as? TimeInterval,
+                          let recordURLString = dictionary["recordFileURL"] as? String,
+                          let recordURL = URL(string: recordURLString)
+                    else {
+                        print("Invalid post fetch conversion")
+                        return nil
+                    }
+                    
+                    print()
+                    print("recordURLString = \(String(describing: URL(string: recordURLString)))")
+                    print()
+                    
+                    //guard let url = URL(string: recordURLString) else { return }
+                    
+                    print("Record found !!")
+                    
+                    let record = Record(
+                        id: id,
+                        timestamp: created,
+                        recordURL: recordURL)
+                    
+                    return record
+                })
+
+                completion(records)
             }
     }
     

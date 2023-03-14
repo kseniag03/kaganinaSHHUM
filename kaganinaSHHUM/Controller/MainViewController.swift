@@ -187,8 +187,6 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        HapticsManager.shared.vibrateForSelection()
-
         let vc = PostViewController(
             post: posts[indexPath.row]
         )
@@ -243,13 +241,10 @@ final class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         print("!!!!!!!!!!   home did load   !!!!!!!!!")
         
         setupView()
         setupNavBar()
-        
-        fetchAllPosts()
     }
     
     override func viewDidAppear(_ animeted: Bool) {

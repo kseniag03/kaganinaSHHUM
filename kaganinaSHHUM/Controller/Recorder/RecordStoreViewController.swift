@@ -7,38 +7,13 @@ import AVFoundation
 import Foundation
 import UIKit
 
-struct Record: Codable, Equatable {
-    var recordURL: URL
-}
-
 protocol AddRecordDelegate {
     func newRecordAdded(record: Record)
 }
 
-final class AddRecordCell: UITableViewCell {
-    
-    static let reuseIdentifier = "AddRecordCell"
-    
-    public var delegate: AddRecordDelegate?
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.selectionStyle = .none
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-    }
-    
-    @available (*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
 final class RecordCell: UITableViewCell {
     
-    static let reuseIdentifier = "RecordCell"
+    static let identifier = "RecordCell"
     
     private var textlabel = UILabel()
     
@@ -72,10 +47,6 @@ final class RecordCell: UITableViewCell {
         textlabel.pinHeight(to: contentView.safeAreaLayoutGuide.heightAnchor)
     }
     
-    
-    //let fileName = getDirectory().appendingPathComponent("\(numberOfRecords).m4a", conformingTo: .url)
-    
-    
     public func configure(_ record: Record) {
         let fileName = record.recordURL.deletingPathExtension().lastPathComponent
         print("!!!&&&%%%!!! record cell configure filename" + String(fileName))
@@ -87,28 +58,18 @@ final class RecordCell: UITableViewCell {
 final class RecordStoreViewController: UIViewController {
     
     var recordsTableView = UITableView(frame: .zero, style: .insetGrouped)
+       
+    private var dataSource: [Record] = []
     
-    private let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        .appendingPathComponent("records.json")
-    
-    private var dataSource: [Record] {
-        set {
-            if let data = try? JSONEncoder().encode(newValue) {
-                do {
-                    let records = String(data: data, encoding: .utf8)
-                    try records?.write(to: path, atomically: false, encoding: .utf8)
-                } catch {
-                    print("Could not save new data")
-                }
+    private func fetchRecords() {
+        print("Fetching records...")
+        guard let email = UserDefaults.standard.string(forKey: "email") else { return }
+        DatabaseManager.shared.getRecords(for: email) { [weak self] records in
+            self?.dataSource = records
+            print("Found \(records.count) records")
+            DispatchQueue.main.async {
+                self?.recordsTableView.reloadData()
             }
-        }
-        get {
-            if let data = try? Data(contentsOf: path) {
-                if let records = try? JSONDecoder().decode([Record].self, from: data) {
-                    return records
-                }
-            }
-            return [Record]()
         }
     }
     
@@ -124,6 +85,11 @@ final class RecordStoreViewController: UIViewController {
         print(dataSource.count)
         print(recordsTableView.contentSize)
     }
+    
+    override func viewDidAppear(_ animeted: Bool) {
+        super.viewDidAppear(animeted)
+        fetchRecords()
+    }
      
     private func setupView() {
         setupTableView()
@@ -132,10 +98,8 @@ final class RecordStoreViewController: UIViewController {
     
     private func setupTableView() {
         recordsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        recordsTableView.register(RecordCell.self, forCellReuseIdentifier: RecordCell.reuseIdentifier)
-        recordsTableView.register(AddRecordCell.self, forCellReuseIdentifier: AddRecordCell.reuseIdentifier)
-        
-     //   self.view.addSubview(recordsTableView)
+        recordsTableView.register(RecordCell.self, forCellReuseIdentifier: RecordCell.identifier)
+
         recordsTableView.backgroundColor = .clear
         recordsTableView.keyboardDismissMode = .onDrag
         recordsTableView.dataSource = self
@@ -162,43 +126,33 @@ final class RecordStoreViewController: UIViewController {
 
 extension RecordStoreViewController: UITableViewDataSource {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        switch section {
-        case 0:
-            return 0//1
-        default:
-            return dataSource.count
-        }
+        return dataSource.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        switch indexPath.section {
-        case 0:
-            if let addNewCell = tableView.dequeueReusableCell(withIdentifier: AddRecordCell.reuseIdentifier, for: indexPath) as? AddRecordCell {
-                addNewCell.textLabel?.text = "new " + String(indexPath.row + 1)
-                addNewCell.delegate = self
-                return addNewCell
-            }
-        default: // !!!! different cells
-            let record = dataSource[indexPath.row]//[dataSource.count - indexPath.row - 1]
-            
-            print("current indexpath.row = " + String(indexPath.row))
-            print("current record.url = " + String(record.recordURL.absoluteString))
-            
-            if let recordCell = tableView.dequeueReusableCell(withIdentifier: RecordCell.reuseIdentifier, for: indexPath) as? RecordCell {
-                recordCell.configure(record)
-                return recordCell
-            }
+        let record = dataSource[indexPath.row]
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: RecordCell.identifier, for: indexPath) as? RecordCell
+        else {
+            fatalError()
         }
-        
-        return UITableViewCell()
+        cell.configure(record)
+        return cell
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let playController = RecordPlayViewController()
+        let record = dataSource[indexPath.row]
+        playController.setFileName(record: record)
+        navigationController?.pushViewController(playController, animated: true)
+    }
+    
 }
 
 extension RecordStoreViewController: UITableViewDelegate {
@@ -217,13 +171,6 @@ extension RecordStoreViewController: UITableViewDelegate {
         )?.withTintColor(.white)
         deleteAction.backgroundColor = .red
         return UISwipeActionsConfiguration(actions: [deleteAction])
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let playController = RecordPlayViewController()
-        let record = dataSource[indexPath.row]
-        playController.setFileName(record: record)
-        navigationController?.pushViewController(playController, animated: true)
     }
 }
 
