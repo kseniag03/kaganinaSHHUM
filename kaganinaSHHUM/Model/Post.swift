@@ -6,9 +6,14 @@
 import Foundation
 
 struct Post {
-    let id: String // Int ?
-    let title: String
+    
+    let id: String
     let timestamp: TimeInterval
-    let headerImageURL: URL?
+    
+    let title: String
     let text: String
+    
+    let headerImageURL: URL?
+    let recordFileURL: URL?
+    
 }

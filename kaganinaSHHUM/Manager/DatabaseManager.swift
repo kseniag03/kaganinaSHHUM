@@ -136,26 +136,26 @@ final class DatabaseManager {
                           let title = dictionary["title"] as? String,
                           let discription = dictionary["discription"] as? String,
                           let created = dictionary["created"] as? TimeInterval,
-                          let imageURLString = dictionary["headerImageURL"] as? String
+                          let imageURLString = dictionary["headerImageURL"] as? String,
+                          let recordURLString = dictionary["recordFileURL"] as? String
                     else {
                         print("Invalid post fetch conversion")
                         return nil
                     }
                     
                     print()
-                    print("imageIRLString = \(imageURLString)")
+                    print("imageURLString = \(String(describing: URL(string: imageURLString)))")
                     print()
-                    
-                    print()
-                    print("imageIRLString = \(String(describing: URL(string: imageURLString)))")
+                    print("recordURLString = \(String(describing: URL(string: recordURLString)))")
                     print()
 
                     let post = Post(
                         id: id,
-                        title: title,
                         timestamp: created,
+                        title: title,
+                        text: discription,
                         headerImageURL: URL(string: imageURLString),
-                        text: discription
+                        recordFileURL: URL(string: recordURLString)
                     )
                     return post
                 })

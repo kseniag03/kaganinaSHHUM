@@ -6,6 +6,8 @@
 import Foundation
 import UIKit
 
+
+
 class HapticsManager {
     static let shared = HapticsManager()
 
@@ -27,12 +29,20 @@ class HapticsManager {
 extension CreateNewPostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     @objc
-    private func headerTapped() {
+    private func imagePickerButtonPressed() {
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary
         picker.delegate = self
         present(picker, animated: true)
     }
+    /*
+    @objc
+    private func headerTapped() {
+        let picker = UIImagePickerController()
+        picker.sourceType = .photoLibrary
+        picker.delegate = self
+        present(picker, animated: true)
+    }*/
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
@@ -46,13 +56,46 @@ extension CreateNewPostViewController: UIImagePickerControllerDelegate, UINaviga
     }
 }
 
+extension CreateNewPostViewController: UIDocumentPickerDelegate {
+    
+    @objc
+    private func recordPickerButtonPressed() {
+        let documentTypes = ["public.audio", "public.m4a"]
+        let picker = UIDocumentPickerViewController(documentTypes: documentTypes, in: .import)
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        // Handle the selected audio file
+        // ...
+    }
+    
+}
+
+/*
+extension CreateNewPostViewController: TagPickerViewControllerDelegate {
+    
+    @objc
+    private func didTapTagPickerButton() {
+        // Present tag picker
+        // ...
+        //tagPicker.delegate = self
+        //delegate?.attachmentCellDidTapTagPicker(tagPicker)
+    }
+ 
+    func tagPickerViewControllerDidFinish(_ viewController: TagPickerViewController, selectedTags: [String]) {
+        // Handle the selected tags
+        // ...
+    }
+    
+}
+*/
+
+
+
+
 final class CreateNewPostViewController: UIViewController {
-    
-    
- //   private let attachment = AttachmentCollectionView()
-    
-    
-    //---------------------------
     
 
     // Title field
@@ -82,36 +125,77 @@ final class CreateNewPostViewController: UIViewController {
     // TextView for post
     private let textView: UITextView = {
         let textView = UITextView()
-        textView.backgroundColor = .secondarySystemBackground
+        textView.backgroundColor = .systemGray6
         textView.isEditable = true
         textView.font = .systemFont(ofSize: 28)
         return textView
     }()
+    
+    var attachment = UIStackView()
 
     private var selectedHeaderImage: UIImage?
+    
+    private var selectedRecordFile: URL? // Record?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
         
+        let imagePicButton = Style.shared.makeMenuButton(title: "Фото", .systemGray6, .darkGray)
+        imagePicButton.addTarget(
+            self,
+            action: #selector(imagePickerButtonPressed),
+            for: .touchUpInside
+        )
+        let recordPicButton = Style.shared.makeMenuButton(title: "Запись", .systemGray6, .darkGray)
+        recordPicButton.addTarget(
+            self,
+            action: #selector(recordPickerButtonPressed),
+            for: .touchUpInside
+        )
+        let tagPicButton = Style.shared.makeMenuButton(title: "Теги", .systemGray6, .darkGray)
+        /*
+        tagPicButton.addTarget(
+            self,
+            action: #selector(didTapTagPickerButton),
+            for: .touchUpInside
+        )
+        */
+        attachment = UIStackView(
+            arrangedSubviews: [ imagePicButton, recordPicButton, tagPicButton ]
+        )
+        attachment.spacing = 5
+        attachment.axis = .horizontal
+        attachment.distribution = .fillEqually
+        attachment.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(attachment)
         view.addSubview(headerImageView)
         view.addSubview(textView)
         view.addSubview(titleField)
         
-        let tap = UITapGestureRecognizer(target: self,
+   /*     let tap = UITapGestureRecognizer(target: self,
                                          action: #selector(headerTapped))
-        headerImageView.addGestureRecognizer(tap)
+        headerImageView.addGestureRecognizer(tap) */
         
         setupButtons()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        attachment.frame = CGRect(
+            x: (view.frame.size.width - (view.frame.size.width / 4)) / 2,
+            y: view.frame.size.height - 160 - view.safeAreaInsets.bottom,
+            width: view.frame.size.width / 5,
+            height: view.frame.size.width / 4
+        )
 
         titleField.frame = CGRect(x: 10, y: view.safeAreaInsets.top, width: view.frame.size.width-20, height: 50)
         headerImageView.frame = CGRect(x: 0, y: titleField.frame.origin.y + titleField.frame.size.height+5, width: view.frame.size.width, height: 160)
-        textView.frame = CGRect(x: 10, y: headerImageView.frame.origin.y + headerImageView.frame.size.height+10, width: view.frame.size.width-20, height: view.frame.size.height-210-view.safeAreaInsets.top)
+        textView.frame = CGRect(x: 10, y: headerImageView.frame.origin.y + headerImageView.frame.size.height+10, width: view.frame.size.width-20, height: view.frame.size.height/3)
+
     }
 
     private func setupButtons() {
@@ -137,17 +221,19 @@ final class CreateNewPostViewController: UIViewController {
 
     @objc
     private func postTapped() {
+        
+        let discription = textView.text ?? ""
+        let headerImage = selectedHeaderImage
+        let recordFile = selectedRecordFile
+        
         // Check data and post
-        guard let title = titleField.text,
-              let discription = textView.text,
-              let headerImage = selectedHeaderImage,
-              let email = UserDefaults.standard.string(forKey: "email"),
-              !title.trimmingCharacters(in: .whitespaces).isEmpty,
-              !discription.trimmingCharacters(in: .whitespaces).isEmpty
+        guard let email = UserDefaults.standard.string(forKey: "email"),
+              let title = titleField.text,
+              !title.trimmingCharacters(in: .whitespaces).isEmpty
         else {
 
             let alert = UIAlertController(title: "Enter Post Details",
-                                          message: "Please enter a title, discription, and select a image to continue.",
+                                          message: "Please enter a title to continue.",
                                           preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
             present(alert, animated: true)
@@ -167,7 +253,7 @@ final class CreateNewPostViewController: UIViewController {
             guard success else { return }
             
             StorageManager.shared.downloadURLForPostHeader(email: email, postId: newPostId) { url in
-                guard let headerUrl = url
+                guard let headerURL = url
                 else {
                     DispatchQueue.main.async {
                         HapticsManager.shared.vibrate(for: .error)
@@ -179,10 +265,11 @@ final class CreateNewPostViewController: UIViewController {
 
                 let post = Post(
                     id: newPostId,
-                    title: title,
                     timestamp: Date().timeIntervalSince1970,
-                    headerImageURL: headerUrl,
-                    text: discription
+                    title: title,
+                    text: discription,
+                    headerImageURL: headerURL,
+                    recordFileURL: recordFile
                 )
 
                 DatabaseManager.shared.insert(post: post, email: email) { [weak self] posted in

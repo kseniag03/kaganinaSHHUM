@@ -23,6 +23,7 @@ final class PostHeaderTableViewCell: UITableViewCell {
         imageView.layer.masksToBounds = true
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = .magenta
         return imageView
     }()
 
@@ -43,7 +44,7 @@ final class PostHeaderTableViewCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        postImageView.image = nil
+        postImageView.image = UIImage(named: "landscape")
     }
 
     func configure(with viewModel: PostHeaderTableViewCellViewModel) {
