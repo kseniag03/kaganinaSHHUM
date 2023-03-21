@@ -78,8 +78,6 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
 
 final class ProfileViewController: UIViewController {
     
-    // also list of  posts
-    
     private let currentEmail: String
     
     private var user: User?
@@ -226,13 +224,7 @@ final class ProfileViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
                 
-        self.view.addSubview(tableView)/*
-        tableView.pinTop(to: self.view.topAnchor)
-        tableView.pinLeft(to: self.view, self.view.frame.width / 10)
-        tableView.pinRight(to: self.view, self.view.frame.width / 10)
-        tableView.pinHeight(to: self.view.safeAreaLayoutGuide.heightAnchor)
-        
-        tableView.reloadData()*/
+        self.view.addSubview(tableView)
     }
     
     private func setupNavBar() {
@@ -244,7 +236,6 @@ final class ProfileViewController: UIViewController {
         )
     }
     
-    /// Sign Out
     @objc
     private func signOutPressed() {
         let sheet = UIAlertController(title: "Sign Out", message: "Do you want to sign out ?", preferredStyle: .actionSheet)

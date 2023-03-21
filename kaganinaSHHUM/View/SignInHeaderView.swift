@@ -19,7 +19,6 @@ class SignInHeaderView: UIView {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 20, weight: .medium)
-        label.text = "share environmental sounds with the world"
         return label
     }()
     
@@ -37,8 +36,6 @@ class SignInHeaderView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-       // imageView.frame = CGRect(x: imageView.frame.width, y: <#T##CGFloat#>, width: <#T##CGFloat#>, height: <#T##CGFloat#>)
-        
         imageView.pinTop(to: self.safeAreaLayoutGuide.topAnchor)
         imageView.pinLeft(to: self, self.frame.size.width / 10)
         imageView.pinRight(to: self, self.frame.size.width / 10)
@@ -48,15 +45,6 @@ class SignInHeaderView: UIView {
         label.pinLeft(to: self, self.frame.size.width / 10)
         label.pinRight(to: self, self.frame.size.width / 10)
         label.pinHeight(to: imageView, 10)
-        /*
-        imageView.pinCenter(to: self)
-        imageView.pinWidth(to: self, self.frame.width / 4)
-        imageView.pinHeight(to: self, self.frame.width / 4)
-        
-        label.pinTop(to: self, 20)
-        label.pinBottom(to: imageView, 10)
-        label.pinWidth(to: self, self.frame.width - 40)
-        label.pinHeight(to: imageView, 30)*/
     
     }
 

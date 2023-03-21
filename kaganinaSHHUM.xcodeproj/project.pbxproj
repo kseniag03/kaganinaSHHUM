@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		16A0890AF4FB1F525EDE8633 /* Pods_kaganinaSHHUM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFDA7BC63F607D47350F469F /* Pods_kaganinaSHHUM.framework */; };
 		1C1FECD229BB2E1100D18911 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1FECD129BB2E1100D18911 /* MainViewController.swift */; };
+		1C3635D329C9BA4E006C7EAE /* RecordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3635D229C9BA4E006C7EAE /* RecordCell.swift */; };
 		1C3D91AE296B173A009403ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3D91AD296B173A009403ED /* AppDelegate.swift */; };
 		1C3D91B0296B173A009403ED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3D91AF296B173A009403ED /* SceneDelegate.swift */; };
 		1C3D91B7296B173B009403ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1C3D91B6296B173B009403ED /* Assets.xcassets */; };
@@ -17,7 +18,6 @@
 		1C3D91C7296B2361009403ED /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3D91C6296B2361009403ED /* Tag.swift */; };
 		1C4B34BC29C0673100693680 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4B34BB29C0673100693680 /* Record.swift */; };
 		1C4B34BE29C0A55900693680 /* TagListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4B34BD29C0A55900693680 /* TagListViewController.swift */; };
-		1C766EE029BA09A500BF9CF5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C766EDF29BA09A500BF9CF5 /* ViewController.swift */; };
 		1C82C3EF29BE19F5004F7D50 /* RecordStoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C3EE29BE19F5004F7D50 /* RecordStoreViewController.swift */; };
 		1C82C3F129BE1A62004F7D50 /* RecordPlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C3F029BE1A62004F7D50 /* RecordPlayViewController.swift */; };
 		1C82C3F429BE1C7C004F7D50 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C3F329BE1C7C004F7D50 /* DatabaseManager.swift */; };
@@ -33,7 +33,6 @@
 		1C82C40A29BE55AE004F7D50 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C40929BE55AE004F7D50 /* TabBarViewController.swift */; };
 		1C82C40D29BF0C8E004F7D50 /* SignInHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C40C29BF0C8E004F7D50 /* SignInHeaderView.swift */; };
 		1C82C40F29BF190D004F7D50 /* StyleLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C40E29BF190D004F7D50 /* StyleLibrary.swift */; };
-		1C82C41129BF7760004F7D50 /* AttachmentCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C41029BF7760004F7D50 /* AttachmentCollectionView.swift */; };
 		1C82C41329BF8328004F7D50 /* PostHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C41229BF8328004F7D50 /* PostHeaderTableViewCell.swift */; };
 		1C82C41529BF873E004F7D50 /* PostPreviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C82C41429BF873E004F7D50 /* PostPreviewTableViewCell.swift */; };
 		1CF14543296C5F1C00DDE53B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF14542296C5F1C00DDE53B /* ProfileViewController.swift */; };
@@ -43,6 +42,7 @@
 
 /* Begin PBXFileReference section */
 		1C1FECD129BB2E1100D18911 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		1C3635D229C9BA4E006C7EAE /* RecordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordCell.swift; sourceTree = "<group>"; };
 		1C3D91AA296B173A009403ED /* kaganinaSHHUM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kaganinaSHHUM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C3D91AD296B173A009403ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1C3D91AF296B173A009403ED /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -53,7 +53,6 @@
 		1C3D91C6296B2361009403ED /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		1C4B34BB29C0673100693680 /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 		1C4B34BD29C0A55900693680 /* TagListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListViewController.swift; sourceTree = "<group>"; };
-		1C766EDF29BA09A500BF9CF5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../../ViewController.swift; sourceTree = "<group>"; };
 		1C82C3EE29BE19F5004F7D50 /* RecordStoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordStoreViewController.swift; sourceTree = "<group>"; };
 		1C82C3F029BE1A62004F7D50 /* RecordPlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordPlayViewController.swift; sourceTree = "<group>"; };
 		1C82C3F329BE1C7C004F7D50 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
@@ -69,7 +68,6 @@
 		1C82C40929BE55AE004F7D50 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		1C82C40C29BF0C8E004F7D50 /* SignInHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInHeaderView.swift; sourceTree = "<group>"; };
 		1C82C40E29BF190D004F7D50 /* StyleLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleLibrary.swift; sourceTree = "<group>"; };
-		1C82C41029BF7760004F7D50 /* AttachmentCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionView.swift; sourceTree = "<group>"; };
 		1C82C41229BF8328004F7D50 /* PostHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		1C82C41429BF873E004F7D50 /* PostPreviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPreviewTableViewCell.swift; sourceTree = "<group>"; };
 		1CF14542296C5F1C00DDE53B /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -143,11 +141,10 @@
 				1C82C40229BE1E90004F7D50 /* Post */,
 				1C82C40129BE1E6F004F7D50 /* Auth */,
 				1C82C3ED29BE0760004F7D50 /* Recorder */,
+				1C82C40929BE55AE004F7D50 /* TabBarViewController.swift */,
 				1C1FECD129BB2E1100D18911 /* MainViewController.swift */,
-				1C766EDF29BA09A500BF9CF5 /* ViewController.swift */,
 				1CF14544296C5FAE00DDE53B /* SearchViewController.swift */,
 				1CF14542296C5F1C00DDE53B /* ProfileViewController.swift */,
-				1C82C40929BE55AE004F7D50 /* TabBarViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -205,8 +202,8 @@
 		1C82C40B29BF0C64004F7D50 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				1C3635D229C9BA4E006C7EAE /* RecordCell.swift */,
 				1C82C40C29BF0C8E004F7D50 /* SignInHeaderView.swift */,
-				1C82C41029BF7760004F7D50 /* AttachmentCollectionView.swift */,
 				1C82C41229BF8328004F7D50 /* PostHeaderTableViewCell.swift */,
 				1C82C41429BF873E004F7D50 /* PostPreviewTableViewCell.swift */,
 			);
@@ -346,20 +343,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				1CF14543296C5F1C00DDE53B /* ProfileViewController.swift in Sources */,
-				1C82C41129BF7760004F7D50 /* AttachmentCollectionView.swift in Sources */,
 				1C82C3EF29BE19F5004F7D50 /* RecordStoreViewController.swift in Sources */,
 				1C82C3F129BE1A62004F7D50 /* RecordPlayViewController.swift in Sources */,
 				1C82C40029BE1DA3004F7D50 /* StorageManager.swift in Sources */,
 				1C4B34BE29C0A55900693680 /* TagListViewController.swift in Sources */,
 				1C82C40A29BE55AE004F7D50 /* TabBarViewController.swift in Sources */,
 				1CF14545296C5FAE00DDE53B /* SearchViewController.swift in Sources */,
-				1C766EE029BA09A500BF9CF5 /* ViewController.swift in Sources */,
 				1C82C3F629BE1CC4004F7D50 /* SignInViewController.swift in Sources */,
 				1C1FECD229BB2E1100D18911 /* MainViewController.swift in Sources */,
 				1C82C40D29BF0C8E004F7D50 /* SignInHeaderView.swift in Sources */,
 				1C4B34BC29C0673100693680 /* Record.swift in Sources */,
 				1C82C3FE29BE1D7E004F7D50 /* AuthManager.swift in Sources */,
 				1C3D91AE296B173A009403ED /* AppDelegate.swift in Sources */,
+				1C3635D329C9BA4E006C7EAE /* RecordCell.swift in Sources */,
 				1C82C3FC29BE1D23004F7D50 /* PostViewController.swift in Sources */,
 				1C82C3F829BE1CD8004F7D50 /* SignUpViewController.swift in Sources */,
 				1C82C40F29BF190D004F7D50 /* StyleLibrary.swift in Sources */,

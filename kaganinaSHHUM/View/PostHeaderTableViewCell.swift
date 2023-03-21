@@ -63,8 +63,6 @@ final class PostHeaderTableViewCell: UITableViewCell {
             }
         }
         else if let url = viewModel.imageURL {
-            // Fetch image & cache
-            
             let request = URLRequest(url: url)
             
             let task = URLSession.shared.dataTask(with: request) { [weak self] data, _, _ in

@@ -45,14 +45,6 @@ final class StorageManager {
                 completion(url)
             }
     }
-    /*
-    public func uploadPostHeaderImage(
-        post: Post,
-        image: UIImage?,
-        completion: @escaping (Bool) -> Void
-    ) {
-        
-    }*/
     
     public func uploadPostHeaderImage(
         email: String,
@@ -117,14 +109,6 @@ final class StorageManager {
                 completion(true)
             }
     }
-    
-    /*
-    public func dowloadURLForPostHeaderImage(
-        post: Post,
-        completion: @escaping (URL?) -> Void
-    ) {
-        
-    }*/
     
     public func downloadURLForPostHeader(
         email: String,

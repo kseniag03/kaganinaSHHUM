@@ -45,14 +45,13 @@ final class PostViewController: UITabBarController {
 }
 
 extension PostViewController: UITableViewDataSource, UITableViewDelegate {
-    // Table
 
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4 // title, image, text // + audio!!!!!!
+        return 4 // title, image, text + audio!!!!!!
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

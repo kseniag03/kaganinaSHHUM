@@ -187,10 +187,6 @@ extension RecorderViewController: AVAudioRecorderDelegate {
             self.recorder?.stop()
             self.recorder = nil
         }
-            
-            
-            
-          
     }
     
     @objc
@@ -204,8 +200,6 @@ extension RecorderViewController: AVAudioRecorderDelegate {
         
         if recordStartButton.titleLabel?.text == "START" {
             
-            
-            
             DispatchQueue.main.async {
                 
                 print("start recording")
@@ -217,11 +211,7 @@ extension RecorderViewController: AVAudioRecorderDelegate {
                 self.recordStartButton.setTitle("PAUSE", for: .normal)
             }
             
-            
-            
         } else {
-            
-            
             
             DispatchQueue.main.async {
                 
